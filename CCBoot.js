@@ -65,7 +65,13 @@ cc._addEventListener = function (element, type, listener, useCapture) {
 };
 
 //is nodejs ? Used to support node-webkit.
-cc._isNodeJs = typeof require !== 'undefined' && require("fs");
+try{
+    cc._isNodeJs = typeof require !== 'undefined' && require("fs");    
+}
+catch(e){
+    cc._isNodeJs = false;
+}
+
 
 /**
  * Iterate over an object or an array, executing a function for each matched element.
@@ -673,13 +679,13 @@ cc.loader = /** @lends cc.loader# */{
                 xhr.setRequestHeader("Accept-Charset", "utf-8");
                 xhr.onreadystatechange = function () {
                     if(xhr.readyState == 4)
-                        xhr.status == 200 ? cb(null, xhr.responseText) : cb(errInfo);
+                        xhr.status == 200 || xhr.status==0 ? cb(null, xhr.responseText) : cb(errInfo);
                 };
             } else {
                 if (xhr.overrideMimeType) xhr.overrideMimeType("text\/plain; charset=utf-8");
                 xhr.onload = function () {
                     if(xhr.readyState == 4)
-                        xhr.status == 200 ? cb(null, xhr.responseText) : cb(errInfo);
+                        xhr.status == 200 || xhr.status==0 ? cb(null, xhr.responseText) : cb(errInfo);
                 };
             }
             xhr.send(null);
@@ -1598,9 +1604,9 @@ cc._initSys = function (config, CONFIG_KEY) {
     var tempCanvas = cc.newElement("Canvas");
     cc._supportRender = true;
     var notSupportGL = !window.WebGLRenderingContext || browserSupportWebGL.indexOf(sys.browserType) == -1 || osSupportWebGL.indexOf(sys.os) == -1;
-    if (userRenderMode === 1 || (userRenderMode === 0 && notSupportGL) || (location.origin == "file://")) {
-        renderType = cc._RENDER_TYPE_CANVAS;
-    }
+    // if (userRenderMode === 1 || (userRenderMode === 0 && notSupportGL) || (location.origin == "file://")) {
+    //     renderType = cc._RENDER_TYPE_CANVAS;
+    // }
 
     sys._canUseCanvasNewBlendModes = function(){
         var canvas = document.createElement('canvas');
@@ -1908,7 +1914,10 @@ cc._setup = function (el, width, height) {
      */
     cc.view = cc.EGLView._getInstance();
     // register system events
-    cc.inputManager.registerSystemEvent(cc._canvas);
+    if(cc._fgCanvas)
+        cc.inputManager.registerSystemEvent(cc._fgCanvas);
+    else
+        cc.inputManager.registerSystemEvent(cc._canvas);
 
     /**
      * @type {cc.Director}
