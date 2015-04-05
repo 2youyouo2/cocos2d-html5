@@ -447,26 +447,7 @@
         "socketio" : [
             "external/socketio/socket.io.min.js"
         ],
-        "external" : ["box2d", "chipmunk", "socketio", "pluginx"],
-
-        "cocoslite" : [
-            "core",
-
-            "cocoslite/cocoslite.js",
-            "cocoslite/shortcode.js",
-
-            "cocoslite/core/EventDispatcher.js",
-            "cocoslite/core/SceneManager.js",
-
-            "cocoslite/object/GameObject.js",
-            "cocoslite/object/MeshSprite.js",
-
-            "cocoslite/component/ComponentManager.js",
-            "cocoslite/component/Component.js",
-            "cocoslite/component/SpriteComponent.js",
-            "cocoslite/component/TransformComponent.js",
-            "cocoslite/component/MeshComponent.js"
-        ]
+        "external" : ["box2d", "chipmunk", "socketio", "pluginx"]
     },
     "bootFile" : "CCBoot.js"
 }

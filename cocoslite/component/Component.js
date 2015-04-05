@@ -1,99 +1,119 @@
-cl.Component = cc.Class.extend({
+(function (factory) {
+    if(typeof exports === 'object') {
+        factory(require, module.exports, module);
+    } else if(typeof define === 'function') {
+        define(factory);
+    }
+})(function(require, exports, module) {
+    "use strict";
     
-    ctor : function(instance, dependencies){
-        this._instance = instance;
-        this._properties = [];
+    var ComponentManager = require("./ComponentManager.js");
 
-        this._dependencies = dependencies;
-    },
+    var Component = cc.Class.extend({
+    
+        ctor : function(instance, dependencies){
+            this._instance = instance;
+            this._properties = [];
 
-    _getProperties: function(){
-        return this._properties;
-    },
-    _setProperties: function(val){
-        if(val.constructor == Array){
-            this._properties = val;
-        }
-    },
+            this._dependencies = dependencies;
+        },
 
-    getTarget: function(){
-        return this._target;
-    },
-
-    addComponent: function(className){
-        if(this._target)
-            this._target.addComponent(className);
-    },
-    getComponent: function(className){
-        if(this._target)
-            return this._target.getComponent(className);
-        return null;
-    },
-
-    addProperties : function (properties){
-        if(properties.constructor == Array){
-            this.properties = this.properties.concat(properties);
-        }
-    },
-
-    _bind : function(target){
-        this._target = target;
-
-        var ds = this._dependencies;
-        if(ds){
-            for(var k in ds){
-                this.addComponent(ds[k]);
+        _getProperties: function(){
+            return this._properties;
+        },
+        _setProperties: function(val){
+            if(val.constructor == Array){
+                this._properties = val;
             }
-        }
+        },
 
-        this.onBind(target);
-    },
+        getTarget: function(){
+            return this._target;
+        },
 
-    _unbind : function(){
-        if(this._exportedMethods != null){
-            var methods = this._exportedMethods;
+        addComponent: function(className){
+            if(this._target)
+                this._target.addComponent(className);
+        },
+        getComponent: function(className){
+            if(this._target)
+                return this._target.getComponent(className);
+            return null;
+        },
 
+        addProperties : function (properties){
+            if(properties.constructor == Array){
+                this.properties = this.properties.concat(properties);
+            }
+        },
+
+        _bind : function(target){
+            this._target = target;
+
+            var ds = this._dependencies;
+            if(ds){
+                for(var k in ds){
+                    this.addComponent(ds[k]);
+                }
+            }
+
+            this.onBind(target);
+        },
+
+        _unbind : function(){
+            if(this._exportedMethods != null){
+                var methods = this._exportedMethods;
+
+                for(var key in methods){
+                    var method = methods[key];
+                    this._target[method] = null;
+                }
+            }
+
+            this.onUnbind();
+        },
+
+        _exportMethods : function (methods) {
+
+            this._exportedMethods = methods;
             for(var key in methods){
                 var method = methods[key];
-                this._target[method] = null;
+                this._target[method] = function(){
+                    this[method].apply(this._instance, arguments);
+                };
             }
+        },
+
+        onBind: function(){
+
+        },
+        onUnbind: function(){
+
+        },
+
+        onEnter : function() {
+
         }
+    });
 
-        this.onUnbind();
-    },
+    cl.defineGetterSetter(Component.prototype, "properties", "_getProperties", "_setProperties");
 
-    _exportMethods : function (methods) {
+    Component.extendComponent = function(className, params, parent) {
+        if(!parent) parent = Component;
 
-        this._exportedMethods = methods;
-        for(var key in methods){
-            var method = methods[key];
-            this._target[method] = function(){
-                this[method].apply(this._instance, arguments);
-            };
-        }
-    },
+        var ret = parent.extend(params);
+        // cl[className] = ret;
+        ret.className = className;
+        ComponentManager.register(className, ret);
 
-    onBind: function(){
-
-    },
-    onUnbind: function(){
-
-    },
-
-    onEnter : function() {
-
+        return ret;
     }
-});
 
-cl.defineGetterSetter(cl.Component.prototype, "properties", "_getProperties", "_setProperties");
+    Component.init = function(obj, params) {
+        for(var k in params) {
+            obj[k] = params[k];
+        }
+    }
 
-cl.Component.extendComponent = function(className, params, parent){
-    if(!parent) parent = cl.Component;
-
-    var ret = parent.extend(params);
-    cl[className] = ret;
-    ret.className = className;
-    cl.ComponentManager.register(className, ret);
-
-    return ret;
-}
+    module.exports = cl.Component = Component;
+})

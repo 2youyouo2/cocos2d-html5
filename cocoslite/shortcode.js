@@ -1,9 +1,7 @@
-String.prototype.endWith = function(endStr) {
-    var d=this.length-endStr.length;
-    return (d>=0 && this.lastIndexOf(endStr)==d);
-};
 
 
+
+// cl.Point
 cl.Point = function(x, y)
 {
     if (x == undefined)
@@ -121,6 +119,7 @@ cc.p = cl.p = function(x,y){
 
 
 
+// Math
 Math.lerp = function(a, b, alpha){
     return a + (b - a) * alpha;
 }
@@ -136,4 +135,3 @@ Math.clamp = function(value, min, max)
     }
     return value;
 }
-
