@@ -27,13 +27,14 @@
 cc.g_NumberOfDraws = 0;
 
 cc.GLToClipTransform = function (transformOut) {
-    var projection = new cc.kmMat4();
-    cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, projection);
+    //var projection = new cc.math.Matrix4();
+    //cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, projection);
+    cc.kmGLGetMatrix(cc.KM_GL_PROJECTION, transformOut);
 
-    var modelview = new cc.kmMat4();
+    var modelview = new cc.math.Matrix4();
     cc.kmGLGetMatrix(cc.KM_GL_MODELVIEW, modelview);
 
-    cc.kmMat4Multiply(transformOut, projection, modelview);
+    transformOut.multiply(modelview);
 };
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -154,7 +155,7 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
         this._scheduler = new cc.Scheduler();
         //action manager
         this._actionManager = cc.ActionManager ? new cc.ActionManager() : null;
-        this._scheduler.scheduleUpdateForTarget(this._actionManager, cc.Scheduler.PRIORITY_SYSTEM, false);
+        this._scheduler.scheduleUpdate(this._actionManager, cc.Scheduler.PRIORITY_SYSTEM, false);
 
         this._eventAfterDraw = new cc.EventCustom(cc.Director.EVENT_AFTER_DRAW);
         this._eventAfterDraw.setUserData(this);
@@ -386,7 +387,7 @@ cc.Director = cc.Class.extend(/** @lends cc.Director# */{
      */
     purgeDirector: function () {
         //cleanup scheduler
-        this.getScheduler().unscheduleAllCallbacks();
+        this.getScheduler().unscheduleAll();
 
         // Disable event dispatching
         if (cc.eventManager)

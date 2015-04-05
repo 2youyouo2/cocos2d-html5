@@ -147,7 +147,8 @@ cc.isString = function(obj) {
  * @returns {boolean}
  */
 cc.isArray = function(obj) {
-    return Object.prototype.toString.call(obj) == '[object Array]';
+    return Array.isArray(obj) ||
+        (typeof obj === 'object' && Object.prototype.toString.call(obj) === '[object Array]');
 };
 
 /**
@@ -156,7 +157,7 @@ cc.isArray = function(obj) {
  * @returns {boolean}
  */
 cc.isUndefined = function(obj) {
-    return typeof obj == 'undefined';
+    return typeof obj === 'undefined';
 };
 
 /**
@@ -165,9 +166,7 @@ cc.isUndefined = function(obj) {
  * @returns {boolean}
  */
 cc.isObject = function(obj) {
-    var type = typeof obj;
-
-    return type == 'function' || (obj && type == 'object');
+    return typeof obj === "object" && Object.prototype.toString.call(obj) === '[object Object]';
 };
 
 /**
@@ -1567,6 +1566,8 @@ cc._initSys = function (config, CONFIG_KEY) {
             browserType = sys.BROWSER_TYPE_ANDROID;
         else if (browserType == "trident") browserType = sys.BROWSER_TYPE_IE;
         else if (browserType == "360 aphone") browserType = sys.BROWSER_TYPE_360;
+    }else if(ua.indexOf("iphone") && ua.indexOf("mobile")){
+        browserType = "safari";
     }
     /**
      * Indicate the running browser type
@@ -1880,7 +1881,8 @@ cc._setup = function (el, width, height) {
             'stencil': true,
             'preserveDrawingBuffer': true,
             'antialias': !cc.sys.isMobile,
-            'alpha': false});
+            'alpha': false
+        });
     if (cc._renderContext) {
         win.gl = cc._renderContext; // global variable declared in CCMacro.js
         cc._drawingUtil = new cc.DrawingPrimitiveWebGL(cc._renderContext);
