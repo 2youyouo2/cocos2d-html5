@@ -110,7 +110,7 @@ cc.LabelTTF._firsrEnglish = /^[a-zA-Z0-9ÄÖÜäöüßéèçàùêâîôû]/;
         locContext.font = this._fontStyleStr;
         this._updateTTF();
         var width = locContentSize.width, height = locContentSize.height;
-        var flag = locLabelCanvas.width == width && locLabelCanvas.height == height;
+        var flag = locLabelCanvas.width === width && locLabelCanvas.height === height;
         locLabelCanvas.width = width;
         locLabelCanvas.height = height;
         if (flag) locContext.clearRect(0, 0, width, height);
@@ -183,7 +183,7 @@ cc.LabelTTF._firsrEnglish = /^[a-zA-Z0-9ÄÖÜäöüßéèçàùêâîôû]/;
                 locSize = cc.size(Math.ceil(locDimensionsWidth + locStrokeShadowOffsetX), Math.ceil(node._dimensions.height + locStrokeShadowOffsetY));
             }
         }
-        if(node._getFontStyle() != "normal"){    //add width for 'italic' and 'oblique'
+        if(node._getFontStyle() !== "normal"){    //add width for 'italic' and 'oblique'
             locSize.width = Math.ceil(locSize.width + node._fontSize * 0.3);
         }
         node.setContentSize(locSize);
@@ -204,10 +204,10 @@ cc.LabelTTF._firsrEnglish = /^[a-zA-Z0-9ÄÖÜäöüßéèçàùêâîôû]/;
         var locContentSizeHeight = node._contentSize.height - locStrokeShadowOffsetY, locVAlignment = node._vAlignment,
             locHAlignment = node._hAlignment, locStrokeSize = node._strokeSize;
 
-        context.setTransform(1, 0, 0, 1, 0 + locStrokeShadowOffsetX * 0.5, locContentSizeHeight + locStrokeShadowOffsetY * 0.5);
+        context.setTransform(1, 0, 0, 1, locStrokeShadowOffsetX * 0.5, locContentSizeHeight + locStrokeShadowOffsetY * 0.5);
 
         //this is fillText for canvas
-        if (context.font != this._fontStyleStr)
+        if (context.font !== this._fontStyleStr)
             context.font = this._fontStyleStr;
         context.fillStyle = this._fillColorStr;
 
@@ -412,12 +412,14 @@ cc.LabelTTF._firsrEnglish = /^[a-zA-Z0-9ÄÖÜäöüßéèçàùêâîôû]/;
         var locDisplayColor = this._displayedColor, node = this._node,
             locShadowColor = node._shadowColor || this._displayedColor;
         var locStrokeColor = node._strokeColor, locFontFillColor = node._textFillColor;
+        var dr = locDisplayColor.r / 255, dg = locDisplayColor.g / 255, db = locDisplayColor.b / 255;
 
-        this._shadowColorStr = "rgba(" + (0 | (locShadowColor.r * 0.5)) + "," + (0 | (locShadowColor.g * 0.5)) + "," + (0 | (locShadowColor.b * 0.5)) + "," + node._shadowOpacity + ")";
-        this._fillColorStr = "rgba(" + (0 | (locDisplayColor.r / 255 * locFontFillColor.r)) + "," + (0 | (locDisplayColor.g / 255 * locFontFillColor.g)) + ","
-            + (0 | (locDisplayColor.b / 255 * locFontFillColor.b)) + ", 1)";  //use globalOpacity  + locDisplayedOpacity / 255 + ")";
-        this._strokeColorStr = "rgba(" + (0 | (locDisplayColor.r / 255 * locStrokeColor.r)) + "," + (0 | (locDisplayColor.g / 255 * locStrokeColor.g)) + ","
-            + (0 | (locDisplayColor.b / 255 * locStrokeColor.b)) + ", 1)";   //use globalOpacity  + locDisplayedOpacity / 255 + ")";
+        this._shadowColorStr = "rgba(" + (0 | (dr * locShadowColor.r)) + "," + (0 | ( dg * locShadowColor.g)) + ","
+            + (0 | (db * locShadowColor.b)) + "," + node._shadowOpacity + ")";
+        this._fillColorStr = "rgba(" + (0 | (dr * locFontFillColor.r)) + "," + (0 | (dg * locFontFillColor.g)) + ","
+            + (0 | (db * locFontFillColor.b)) + ", 1)";
+        this._strokeColorStr = "rgba(" + (0 | (dr * locStrokeColor.r)) + "," + (0 | (dg * locStrokeColor.g)) + ","
+            + (0 | (db * locStrokeColor.b)) + ", 1)";
     };
 
     proto._updateColor = function(){
