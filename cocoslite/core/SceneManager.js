@@ -7,7 +7,7 @@
 })(function(require, exports, module) {
     "use strict";
 
-    var GameObject = require("../object/GameObject.js");
+    var GameObject = require("./GameObject.js");
 
     var SceneManager = cc.Class.extend({
         ctor : function () {
@@ -40,10 +40,10 @@
         	var self = this;
 
         	cc.LoaderScene.preload(data.res, function () {
-                var resIndex = 0;
+                // var resIndex = 0;
 
-                function loadResComplete(){
-                    if(++resIndex < data.res.length) return;
+                // function loadResComplete(){
+                    // if(++resIndex < data.res.length) return;
 
                     var scene = new cc.Scene();
                     scene.res = data.res;
@@ -52,11 +52,11 @@
                     }
 
                     if(cb) cb(scene)
-                }
+                // }
 
-                for(var i=0; i<data.res.length; i++){
-                    cc.textureCache.addImage(data.res[i], loadResComplete);
-                }
+                // for(var i=0; i<data.res.length; i++){
+                //     cc.textureCache.addImage(data.res[i], loadResComplete);
+                // }
 
             }, this);
         },

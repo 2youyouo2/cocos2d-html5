@@ -53,7 +53,7 @@
             }
 
             if(c.onUpdate) {
-                if(this._updateRequest === 0 && this._isrunning) {
+                if(this._updateRequest === 0 && this.isRunning()) {
                     this.scheduleUpdate();
                 }
                 this._updateRequest++;
@@ -104,7 +104,7 @@
         },
 
         update: function(dt) {
-            if(!this._running) return;
+            if(!this.isRunning()) return;
 
             for(var key in this._components){
                 var c = this._components[key];

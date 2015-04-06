@@ -1662,7 +1662,7 @@ cc._initSys = function (config, CONFIG_KEY) {
         notSupportGL = !window.WebGLRenderingContext || osSupportWebGL.indexOf(sys.os) === -1;
     else
         notSupportGL = !window.WebGLRenderingContext || browserSupportWebGL.indexOf(sys.browserType) === -1 || osSupportWebGL.indexOf(sys.os) === -1;
-    if (userRenderMode === 1 || (userRenderMode === 0 && notSupportGL) || (location.origin === "file://"))
+    if (userRenderMode === 1 || (userRenderMode === 0 && notSupportGL) /*|| (location.origin === "file://")*/)
         renderType = cc._RENDER_TYPE_CANVAS;
 
     sys._canUseCanvasNewBlendModes = function(){

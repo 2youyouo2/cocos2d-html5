@@ -25,10 +25,6 @@ cl = cl ? cl : {};
 
     cl.defineGetterSetter(cc.Node.prototype, "name", "getName", "setName");
 
-    cc.Node.prototype.name = "Node";
-    cc.Layer.prototype.name = "Layer";
-    cc.Scene.prototype.name = "Scene";
-
 });
 
 
