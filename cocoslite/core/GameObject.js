@@ -52,6 +52,10 @@
                 return null;
             }
 
+            this._components[classname] = c;
+
+            c._bind(this);
+
             if(c.onUpdate) {
                 if(this._updateRequest === 0 && this.isRunning()) {
                     this.scheduleUpdate();
@@ -59,9 +63,9 @@
                 this._updateRequest++;
             }
 
-            this._components[classname] = c;
-
-            c._bind(this);
+            if(this.isRunning()) {
+                c.onEnter(this);
+            }
 
             return c;
         },
