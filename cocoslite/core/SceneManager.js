@@ -47,8 +47,14 @@
 
                     var scene = new cc.Scene();
                     scene.res = data.res;
+
+                    var parent = scene;
+                    if(cl.createCanvas) {
+                        parent = cl.createCanvas(scene, data.canvas);
+                    }
+
                     for(var i=0; i<data.children.length; i++){
-                        self.parseGameObject(scene, data.children[i]);
+                        self.parseGameObject(parent, data.children[i]);
                     }
 
                     if(cb) cb(scene)
@@ -61,28 +67,28 @@
             }, this);
         },
 
-        parseGameObject : function(parent, data){
+        parseGameObject : function(parent, data) {
         	var o = new GameObject();
         	parent.addChild(o);
 
-        	for(var i=0; i<data.components.length; i++){
+        	for(var i=0; i<data.components.length; i++) {
         		this.parseComponent(o, data.components[i]);
         	}
 
-        	if(data.children){
+        	if(data.children) {
     	    	for(var i=0; i<data.children.length; i++){
     	    		this.parseGameObject(o, data.children[i]);
     	    	}
         	}
-        	
+
         	return o;
         },
 
-        parseComponent: function(parent, data){
+        parseComponent: function(parent, data) {
         	var c = parent.addComponent(data.class);
             if(c == null) return null;
             
-        	for(var k in data){
+        	for(var k in data) {
         		if(k == "class") continue;
 
         		c[k] = data[k];
