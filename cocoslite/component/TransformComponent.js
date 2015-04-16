@@ -11,15 +11,20 @@
 
     var TransformComponent = Component.extendComponent("TransformComponent",{
         ctor: function () {
+            this.properties = ["position", "scale", "rotation"];
+
             this._super(this);
-            
-            this.addProperties(["position", "scale", "rotation"]);
         },
 
         _setPosition: function(val){
-            this._target.setPosition(val);
+            if(this._target) {
+                this._target.setPosition(val);
+            }
         },
         _getPosition: function(){
+            if(!this._target) {
+                return cl.p();
+            }
             return this._target.getPosition();
         },
 
@@ -27,8 +32,7 @@
             if(y){
                 this._target.scaleX = val;
                 this._target.scaleY = y;
-            }
-            else {
+            } else {
                 this._target.scaleX = val.x;
                 this._target.scaleY = val.y;
             }   
@@ -41,8 +45,7 @@
             if(y){
                 this._target.rotationX = val;
                 this._target.rotationY = y;
-            }
-            else {
+            } else {
                 this._target.rotationX = val.x;
                 this._target.rotationY = val.y;
             }
@@ -61,9 +64,14 @@
 
         (function(p){
             self[set] = function(val){
-                this._target[p] = val;
+                if(this._target) {
+                    this._target[p] = val;
+                }
             }
             self[get] = function(){
+                if(!this._target) {
+                    return null;
+                }
                 return this._target[p];
             }
         })(p);

@@ -13,7 +13,7 @@
     
         ctor : function(instance, dependencies){
             this._instance = instance;
-            this._properties = [];
+            this._properties = this._properties ? this._properties : [];
 
             this._dependencies = dependencies;
         },
@@ -43,6 +43,9 @@
 
         addProperties : function (properties){
             if(properties.constructor == Array){
+                if(!this.properties) {
+                    this.properties = [];
+                }
                 this.properties = this.properties.concat(properties);
             }
         },
@@ -102,7 +105,6 @@
         if(!parent) parent = Component;
 
         var ret = parent.extend(params);
-        // cl[className] = ret;
         ret.className = className;
         ComponentManager.register(className, ret);
 

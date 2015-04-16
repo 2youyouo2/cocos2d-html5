@@ -11,11 +11,12 @@
 
     var SpriteComponent = Component.extendComponent("SpriteComponent", {
         ctor: function () {
-            this._super(this);
+            this.properties = ["file", "anchorPoint"];
+            
             this._texture = "";
             this._anchorPoint = new cc.p(0.5, 0.5);
             
-            this.properties = ["file", "anchorPoint"];
+            this._super(this);
         },
 
         _setFile: function(file){

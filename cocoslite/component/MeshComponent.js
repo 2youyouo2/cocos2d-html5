@@ -11,12 +11,12 @@
 
     var MeshComponent = Component.extendComponent("MeshComponent", {
         ctor: function () {
-            this._super(this);
-            
             // this.properties = ["materials", "subMeshes", "vertices"];
-
+            
             this._innerMesh = new cl.MeshSprite();
             this._innerMesh.retain();
+            
+            this._super(this);
         },
 
         _getMaterials: function() {
