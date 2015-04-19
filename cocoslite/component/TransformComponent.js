@@ -38,7 +38,7 @@
             }   
         },
         _getScale: function(){
-            return {x: this.scaleX, y: this.scaleY};
+            return cl.p(this.scaleX, this.scaleY);
         },
 
         _setSkew: function(val, y){
@@ -51,7 +51,7 @@
             }
         },
         _getSkew: function(){
-            return {x: this.rotationX, y: this.rotationY};
+            return cl.p(this.rotationX, this.rotationY);
         }
     });
 

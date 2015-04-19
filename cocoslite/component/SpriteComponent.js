@@ -14,7 +14,7 @@
             this.properties = ["file", "anchorPoint"];
             
             this._texture = "";
-            this._anchorPoint = new cc.p(0.5, 0.5);
+            this._anchorPoint = new cl.p(0.5, 0.5);
             
             this._super(this);
         },
@@ -31,7 +31,7 @@
             return this._anchorPoint;
         },
         _setAnchorPoint: function(val){
-            this._anchorPoint = val;
+            this._anchorPoint = cl.p(val);
             if(this._innerSprite){
                 this._innerSprite.setAnchorPoint(val);
             }
