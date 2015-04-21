@@ -87,14 +87,14 @@
             }
         },
 
-        onBind: function(){
+        onBind: function(target){
 
         },
-        onUnbind: function(){
+        onUnbind: function(target){
 
         },
 
-        onEnter : function() {
+        onEnter : function(target) {
 
         }
     });

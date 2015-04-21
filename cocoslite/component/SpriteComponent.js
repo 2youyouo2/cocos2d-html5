@@ -11,20 +11,19 @@
 
     var SpriteComponent = Component.extendComponent("SpriteComponent", {
         ctor: function () {
-            this.properties = ["file", "anchorPoint"];
+            this.properties = ["sprite", "anchorPoint"];
             
-            this._texture = "";
             this._anchorPoint = new cl.p(0.5, 0.5);
+            this._innerSprite = new cc.Sprite();
             
             this._super(this);
         },
 
-        _setFile: function(file){
-            this._file = file;
-            this._updateTexture();
+        _setSprite: function(file) {
+            this._innerSprite.initWithFile(file);
         },
-        _getFile: function(){
-            return this._file;
+        _getSprite: function(){
+            return this._innerSprite;
         },
 
         _getAnchorPoint: function(){
@@ -32,29 +31,18 @@
         },
         _setAnchorPoint: function(val){
             this._anchorPoint = cl.p(val);
-            if(this._innerSprite){
-                this._innerSprite.setAnchorPoint(val);
-            }
-        },
-
-        _updateTexture : function(){
-            if(this._file == "" && this._innerSprite){
-                this._innerSprite.removeFromParent();
-            }
-
-            if(this._file != ""){
-                if(!this._innerSprite){
-                    this._innerSprite = new cc.Sprite();
-                    this._innerSprite.setAnchorPoint(this._anchorPoint);
-                    if(this._target)
-                        this._target.addChild(this._innerSprite);
-                }
-                this._innerSprite.setTexture(this._file);
-            }
+            this._innerSprite.setAnchorPoint(val);
         },
 
         _getBoundingBox: function(){
             return this._innerSprite.getBoundingBoxToWorld();
+        },
+
+        onBind: function(target) {
+            target.addChild(this._innerSprite);
+        },
+        onUnbind: function(target){
+            target.removeChild(this._innerSprite);
         },
 
         hitTest: function(worldPoint){
@@ -71,7 +59,7 @@
     var _p = SpriteComponent.prototype;
     SpriteComponent.editorDir = "Sprite";
 
-    cl.defineGetterSetter(_p, "file", "_getFile", "_setFile");
+    cl.defineGetterSetter(_p, "sprite", "_getSprite", "_setSprite");
     cl.defineGetterSetter(_p, "anchorPoint", "_getAnchorPoint", "_setAnchorPoint");
     cl.defineGetterSetter(_p, "boundingBox", "_getBoundingBox", null);
 
