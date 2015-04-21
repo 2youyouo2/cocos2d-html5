@@ -12,6 +12,30 @@
     var SceneManager = cc.Class.extend({
         ctor : function () {
         	this._sceneMap = {};
+            this._deserializeFuncs = [];
+        },
+
+        registerDeserialize: function(func) {
+            this._deserializeFuncs.push(func);
+        },
+
+        tryReviver: function(key, value) {
+            var funcs = this._deserializeFuncs;
+            for(var i=0; i<funcs.length; i++) {
+                var ret;
+                try {
+                    ret = funcs[i](key, value);
+                }
+                catch(e) {
+                    console.log("SceneManager.tryReviver for [%s]failed : ", key, e);
+                }
+                
+                if(ret) {
+                    return ret;
+                }
+            }
+
+            return value;
         },
 
         loadScene : function(path, cb, force) {
@@ -31,7 +55,7 @@
                     self._sceneMap[path] = json;
                     
                     self.parseData(json, parseComplete);
-                });
+                }, this.tryReviver.bind(this));
             }
         },
 
@@ -90,7 +114,7 @@
             
         	for(var k in data) {
         		if(k == "class") continue;
-
+                
         		c[k] = data[k];
         	}
 
@@ -98,5 +122,18 @@
         }
     });
 
-    module.exports = cl.SceneManager = new SceneManager;
+    var manager = new SceneManager;
+
+    manager.registerDeserialize(function(key, value) {
+        var head = 'cl.Enum.';
+
+        if(typeof value === 'string' && value.indexOf(head) === 0) {
+            var ret = value.split('.');
+            return cl.Enum[ret[2]][ret[3]];
+        }
+
+        return null;
+    });
+
+    module.exports = cl.SceneManager = manager;
 });

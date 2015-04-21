@@ -1,3 +1,57 @@
+cl.EnumValue = function(Enum, key, value) {
+    this.Enum = Enum;
+    this.value = value;
+    
+    this.toString = function() {
+        return 'cl.Enum' + Enum.name + '.' + key;
+    }
+}
+
+// cl.Enum
+cl.Enum = function() {
+    
+    var name = arguments[0];
+    Array.prototype.splice.call(arguments, 0,1);
+
+    if(cl[name]) {
+        console.log("Can't regiseter Enum with an existed name [%s]", name);
+    }
+
+
+    var currentNumber = 0;
+    var Enum = {};
+    Enum.name = name;
+
+    for(var i=0; i<arguments.length; i++) {
+        var arg = arguments[i];
+
+        var key, value;
+
+        if(Array.isArray(arg)) {
+            key = arg[0];
+            currentNumber = value = arg[1];
+        } else {
+            key = arg;
+            value = currentNumber;
+        }
+
+        Enum[key] = new cl.EnumValue(Enum, key, value);
+
+        currentNumber++;
+    }
+
+    Enum.forEach = function(cb) {
+        for(var k in this) {
+            if(k !== 'name') {
+                cb(k, this[k]);
+            }
+        }
+    }
+
+    cl.Enum[name] = Enum;
+
+    return Enum;
+}
 
 
 
