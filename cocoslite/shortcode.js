@@ -42,7 +42,7 @@ cl.Enum = function() {
 
     Enum.forEach = function(cb) {
         for(var k in this) {
-            if(k !== 'name') {
+            if(k !== 'name' && k !== 'forEach') {
                 cb(k, this[k]);
             }
         }
