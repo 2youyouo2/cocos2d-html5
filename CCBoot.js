@@ -738,14 +738,14 @@ cc.loader = /** @lends cc.loader# */{
      * @param {string} url
      * @param {function} [cb] arguments are : err, json
      */
-    loadJson: function (url, cb) {
+    loadJson: function (url, cb, reviver) {
         this.loadTxt(url, function (err, txt) {
             if (err) {
                 cb(err);
             }
             else {
                 try {
-                    var result = JSON.parse(txt);
+                    var result = JSON.parse(txt, reviver);
                 }
                 catch (e) {
                     throw "parse json [" + url + "] failed : " + e;
