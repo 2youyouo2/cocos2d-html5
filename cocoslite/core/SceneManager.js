@@ -59,6 +59,23 @@
             }
         },
 
+        loadSceneWithContent: function(content, cb) {
+
+            try{
+                var json = JSON.parse(content, this.tryReviver.bind(this)); 
+
+                var parseComplete = function(scene){
+                    if(scene && cb) cb(scene);
+                }
+
+                this.parseData(json, parseComplete);   
+            }
+            catch(err) {
+                throw err;
+            }
+            
+        },
+
         parseData : function(json, cb){
         	var data = json.root;
         	var self = this;
@@ -81,7 +98,9 @@
                         self.parseGameObject(parent, data.children[i]);
                     }
 
-                    if(cb) cb(scene)
+                    if(cb) {
+                        cb(scene);
+                    }
                 // }
 
                 // for(var i=0; i<data.res.length; i++){
