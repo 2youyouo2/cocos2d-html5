@@ -43,16 +43,23 @@
         },
 
         addComponent : function(classname){
-            var c = this._components[classname];
-            if(c) return c;
+            var c;
 
-            c = cl.ComponentManager.create(classname);
-            if(c == null){
-                console.log(classname + "is not a valid Component");
-                return null;
+            if(typeof classname === 'string') {
+                c = this._components[classname];
+                if(c) return c;
+
+                c = cl.ComponentManager.create(classname);
+                if(c == null){
+                    console.log(classname + "is not a valid Component");
+                    return null;
+                }
+
+                this._components[classname] = c;
+            } else if(typeof classname === 'object'){
+                c = classname;
+                this._components[c.classname] = c;
             }
-
-            this._components[classname] = c;
 
             c._bind(this);
 
@@ -81,18 +88,26 @@
         },
 
         removeComponent: function (classname) {
+            if(typeof classname === 'object') {
+                classname = classname.classname;
+            }
+
             var c = this._components[classname];
-            if(c != null)
+
+            if(c != null) {
                 c._unbind();
 
-            if(c.onUpdate) {
-                this._updateRequest--;
-                if(this._updateRequest === 0) {
-                    this.unscheduleUpdate();
+                if(c.onUpdate) {
+                    this._updateRequest--;
+                    if(this._updateRequest === 0) {
+                        this.unscheduleUpdate();
+                    }
                 }
             }
 
             this._components[classname] = null;
+
+            return c;
         },
 
         onEnter: function() {

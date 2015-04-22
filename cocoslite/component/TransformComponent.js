@@ -9,86 +9,116 @@
     
     var Component = require("./Component.js");
 
-    var TransformComponent = Component.extendComponent("TransformComponent",{
-        ctor: function () {
-            this.properties = ["position", "scale", "rotation"];
-
-            this._super(this);
+    var TransformComponent = Component.extendComponent("TransformComponent", {
+        ctor: function() {
+            this._super(["position", "scale", "rotation"]);
         },
 
-        _setPosition: function(val){
-            if(this._target) {
-                this._target.setPosition(val);
-            }
-        },
-        _getPosition: function(){
-            if(!this._target) {
-                return cl.p();
-            }
-            return this._target.getPosition();
-        },
+        _get_set_: {
+            "position": {
+                get: function() {
+                    if(!this.target) {
+                        return cl.p();
+                    }
+                    return this.target.getPosition();
+                },
+                set: function(val) {
+                    this.target.setPosition(val);
+                }
+            },
 
-        _setScale: function(val, y){
-            if(y){
-                this._target.scaleX = val;
-                this._target.scaleY = y;
-            } else {
-                this._target.scaleX = val.x;
-                this._target.scaleY = val.y;
-            }   
-        },
-        _getScale: function(){
-            return cl.p(this.scaleX, this.scaleY);
-        },
+            "scale": {
+                get: function() {
+                    if(!this.target) {
+                        return cl.p();
+                    }
+                    return cl.p(this.target.scaleX, this.target.scaleY);
+                },
+                set: function(val, y) {
+                    if(y) {
+                        this.target.scaleX = val;
+                        this.target.scaleY = y;
+                    } else {
+                        this.target.scaleX = val.x;
+                        this.target.scaleY = val.y;
+                    }  
+                }
+            },
 
-        _setSkew: function(val, y){
-            if(y){
-                this._target.rotationX = val;
-                this._target.rotationY = y;
-            } else {
-                this._target.rotationX = val.x;
-                this._target.rotationY = val.y;
-            }
-        },
-        _getSkew: function(){
-            return cl.p(this.rotationX, this.rotationY);
+            "rotation": {
+                get: function() {
+                    if(!this.target) {
+                        return cl.p();
+                    }
+                    return cl.p(this.target.rotationX, this.target.rotationY);
+                },
+                set: function(val, y) {
+                    if(y) {
+                        this.target.rotationX = val;
+                        this.target.rotationY = y;
+                    } else {
+                        this.target.rotationX = val.x;
+                        this.target.rotationY = val.y;
+                    }
+                }
+            },
+
+            "x": {
+                set: function(val) {
+                    this.position = cl.p(val, this.position.y);
+                },
+                get: function() {
+                    return this.target.x;
+                }
+            },
+
+            "y": {
+                set: function(val) {
+                    this.position = cl.p(this.position.x, val);
+                },
+                get: function() {
+                    return this.target.y;
+                }
+            },
+
+            "scaleX": {
+                set: function(val) {
+                    this.scale = cl.p(val, this.scale.y);
+                },
+                get: function() {
+                    return this.target.scaleX;
+                }
+            },
+
+            "scaleY": {
+                set: function(val) {
+                    this.scale = cl.p(this.scale.x, val);
+                },
+                get: function() {
+                    return this.target.scaleY;
+                }
+            },
+
+            "rotationX": {
+                set: function(val) {
+                    this.rotation = cl.p(val, this.rotation.y);
+                    this.target.rotationX = val;
+                },
+                get: function() {
+                    return this.target.rotationX;
+                }
+            },
+
+            "rotationY": {
+                set: function(val) {
+                    this.rotation = cl.p(this.rotation.x, val);
+                },
+                get: function() {
+                    return this.target.rotationY;
+                }
+            },
         }
     });
-
-
-    var _p = TransformComponent.prototype;
-    _p._registerTargetProperty = function(p){
-        var set = "_set"+p;
-        var get = "_get"+p;
-        var self = this;
-
-        (function(p){
-            self[set] = function(val){
-                if(this._target) {
-                    this._target[p] = val;
-                }
-            }
-            self[get] = function(){
-                if(!this._target) {
-                    return null;
-                }
-                return this._target[p];
-            }
-        })(p);
-
-        cl.defineGetterSetter(this, p, get, set);
-    }
-
-    _p._registerTargetProperty("x");
-    _p._registerTargetProperty("y");
-    _p._registerTargetProperty("scaleX");
-    _p._registerTargetProperty("scaleY");
-    _p._registerTargetProperty("rotationX");
-    _p._registerTargetProperty("rotationY");
-
-    cl.defineGetterSetter(_p, "position", "_getPosition",   "_setPosition");
-    cl.defineGetterSetter(_p, "scale",    "_getScale",      "_setScale");
-    cl.defineGetterSetter(_p, "rotation", "_getSkew",       "_setSkew");
 
     exports.Component = TransformComponent;
 });

@@ -9,102 +9,115 @@
     
     var ComponentManager = require("./ComponentManager.js");
 
-    var Component = cc.Class.extend({
-    
-        ctor : function(instance, dependencies){
-            this._instance = instance;
-            this._properties = this._properties ? this._properties : [];
+    var ctor = function(properties, dependencies) {
+        var self = this;
 
-            this._dependencies = dependencies;
-        },
+        var _properties      = properties ? properties : [];
+        var _dependencies    = dependencies ? dependencies : [];
+        var _target          = null;
+        var _exportedMethods = null;
 
-        _getProperties: function(){
-            return this._properties;
-        },
-        _setProperties: function(val){
-            if(val.constructor == Array){
-                this._properties = val;
-            }
-        },
+        this.addComponent = function(className){
+            if(_target)
+                _target.addComponent(className);
+        };
 
-        getTarget: function(){
-            return this._target;
-        },
-
-        addComponent: function(className){
-            if(this._target)
-                this._target.addComponent(className);
-        },
-        getComponent: function(className){
-            if(this._target)
-                return this._target.getComponent(className);
+        this.getComponent = function(className){
+            if(_target)
+                return _target.getComponent(className);
             return null;
         },
 
-        addProperties : function (properties){
+        this.addProperties = function (properties){
             if(properties.constructor == Array){
-                if(!this.properties) {
-                    this.properties = [];
+                if(!_properties) {
+                    _properties = [];
                 }
-                this.properties = this.properties.concat(properties);
+                _properties = _properties.concat(properties);
             }
-        },
+        };
 
-        _bind : function(target){
-            this._target = target;
+        this._bind = function(target){
+            _target = target;
 
-            var ds = this._dependencies;
-            if(ds){
-                for(var k in ds){
-                    this.addComponent(ds[k]);
-                }
+            for(var k in _dependencies){
+                this.addComponent(_dependencies[k]);
             }
 
             this.onBind(target);
-        },
+        };
 
-        _unbind : function(){
-            if(this._exportedMethods != null){
-                var methods = this._exportedMethods;
+        this._unbind = function(){
+            if(_exportedMethods != null){
+                var methods = _exportedMethods;
 
                 for(var key in methods){
                     var method = methods[key];
-                    this._target[method] = null;
+                    _target[method] = null;
                 }
             }
 
             this.onUnbind();
-        },
+        };
 
-        _exportMethods : function (methods) {
+        this._exportMethods = function (methods) {
 
-            this._exportedMethods = methods;
+            _exportedMethods = methods;
+
             for(var key in methods){
                 var method = methods[key];
-                this._target[method] = function(){
-                    this[method].apply(this._instance, arguments);
+                _target[method] = function(){
+                    self[method].apply(self, arguments);
                 };
             }
+        };
+
+
+        cl.defineGetterSetter(this, {
+            "properties": {
+                get: function() {
+                    return _properties;
+                },
+                set: function(val) {
+                    _properties = val;
+                }
+            },
+
+            "target": {
+                get: function() {
+                    return _target;
+                }
+            }
+        });
+    }
+
+    var Component = cc.Class.extend({
+        ctor:ctor,
+        
+        onBind: function(target) {
+
         },
-
-        onBind: function(target){
-
-        },
-        onUnbind: function(target){
+        onUnbind: function(target) {
 
         },
-
-        onEnter : function(target) {
+        onEnter: function(target) {
 
         }
     });
 
-    cl.defineGetterSetter(Component.prototype, "properties", "_getProperties", "_setProperties");
 
     Component.extendComponent = function(className, params, parent) {
         if(!parent) parent = Component;
 
+        var gs = params._get_set_;
+        delete params._get_set_;
+
         var ret = parent.extend(params);
+
+        if(gs) {
+            cl.defineGetterSetter(ret.prototype, gs);
+        }
+
         ret.className = className;
         ComponentManager.register(className, ret);
 

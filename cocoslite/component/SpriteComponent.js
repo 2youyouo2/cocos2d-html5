@@ -11,12 +11,11 @@
 
     var SpriteComponent = Component.extendComponent("SpriteComponent", {
         ctor: function () {
-            this.properties = ["sprite", "anchorPoint"];
             
             this._anchorPoint = new cl.p(0.5, 0.5);
             this._innerSprite = new cc.Sprite();
             
-            this._super(this);
+            this._super(["sprite", "anchorPoint"]);
         },
 
         _setSprite: function(file) {
