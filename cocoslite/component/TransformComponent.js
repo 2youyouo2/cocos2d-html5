@@ -116,7 +116,7 @@
                 get: function() {
                     return this.target.rotationY;
                 }
-            },
+            }
         }
     });
 
