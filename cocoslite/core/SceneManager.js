@@ -131,17 +131,38 @@
     	return c;
     };
 
+    var stringParsers = [
+        {
+            re: /#?([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/,
+            parse: function(execResult) {
+                return cc.color(execResult[0]);
+            }
+        },
+        {
+            re: /cl.Enum.(\w*)+\.(\w*)+/,
+            parse: function(execResult) {
+                return cl.Enum[execResult[1]][execResult[2]];
+            }
+        }
+    ];
 
     // register default reviver
     SceneManager.registerDeserialize(function(key, value) {
-        var head = 'cl.Enum.';
 
-        if(typeof value === 'string' && value.indexOf(head) === 0) {
-            var ret = value.split('.');
-            return cl.Enum[ret[2]][ret[3]];
+        var ret = null;
+
+        if(typeof value === 'string') {
+
+            stringParsers.forEach(function(parser) {
+                var match = parser.re.exec(value);
+
+                if(match) {
+                    ret = parser.parse(match);
+                }
+            });
         }
 
-        return null;
+        return ret;
     });
 
     module.exports = cl.SceneManager = SceneManager;
