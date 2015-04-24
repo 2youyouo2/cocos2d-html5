@@ -76,7 +76,9 @@
 
         onBind: function(target) {
             target.addChild(this._innerMesh);
-        }
+        },
+
+        _folder_: "base"
     });
 
     var _p = MeshComponent.prototype;

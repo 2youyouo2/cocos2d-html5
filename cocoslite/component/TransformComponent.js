@@ -117,7 +117,9 @@
                     return this.target.rotationY;
                 }
             }
-        }
+        },
+
+        _folder_: "base"
     });
 
     exports.Component = TransformComponent;

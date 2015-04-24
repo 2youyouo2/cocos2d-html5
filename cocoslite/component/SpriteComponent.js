@@ -52,7 +52,9 @@
             var rect = cc.rect(0, 0, s.width, s.height);
 
             return cc.rectContainsPoint(rect, p);
-        }
+        },
+
+        _folder_: "base"
     });
 
     var _p = SpriteComponent.prototype;

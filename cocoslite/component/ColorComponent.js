@@ -62,7 +62,9 @@
                     return this.target.cascadeOpacity;
                 }
             }
-        }
+        },
+
+        _folder_: "base"
     });
 
     exports.Component = ColorComponent;
