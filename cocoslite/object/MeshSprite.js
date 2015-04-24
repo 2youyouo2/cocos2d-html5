@@ -50,13 +50,13 @@ cl.MeshSprite = cc.Node.extend({
 
     _className: "MeshSprite",
 
-	ctor: function(){
-		cc.Node.prototype.ctor.call(this);
-		
+    ctor: function(){
+        cc.Node.prototype.ctor.call(this);
+        
         this.init();
-	},
+    },
 
-	init: function() {
+    init: function() {
         if (cc.Node.prototype.init.call(this)) {
             var locCmd = this._renderCmd;
             this._blendFunc = new cc.BlendFunc(cc.BLEND_SRC, cc.BLEND_DST);
@@ -77,21 +77,21 @@ cl.MeshSprite = cc.Node.extend({
     },
 
     _setVertices: function(vertices){
-    	var VertexLength = cc.V3F_C4B_T2F.BYTES_PER_ELEMENT;
+        var VertexLength = cc.V3F_C4B_T2F.BYTES_PER_ELEMENT;
 
-    	this._buffer = [];
+        this._buffer = [];
 
-    	this._trianglesArrayBuffer = new ArrayBuffer(VertexLength * vertices.length);
+        this._trianglesArrayBuffer = new ArrayBuffer(VertexLength * vertices.length);
         this._trianglesReader = new Uint8Array(this._trianglesArrayBuffer);
 
         for(var i=0; i<vertices.length; i++){
-        	var v = vertices[i];
-        	var nv = new cc.V3F_C4B_T2F(v._vertices, v._colors, v._texCoords, this._trianglesArrayBuffer, i*VertexLength);
-        	this._buffer.push(nv);
+            var v = vertices[i];
+            var nv = new cc.V3F_C4B_T2F(v._vertices, v._colors, v._texCoords, this._trianglesArrayBuffer, i*VertexLength);
+            this._buffer.push(nv);
         }
     },
     _getVertices: function(){
-    	return this._buffer;
+        return this._buffer;
     },
 
     _getMaterials: function(){
@@ -106,8 +106,8 @@ cl.MeshSprite = cc.Node.extend({
     },
 
     rebindVertices: function() {
-    	this._setupVBO();
-    	this._dirty = true;
+        this._setupVBO();
+        this._dirty = true;
     },
 
     _setupVBO: function () {
@@ -138,7 +138,7 @@ cl.MeshSprite = cc.Node.extend({
         // gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this._indices, gl.STATIC_DRAW);
     },
 
-	// getBlendFunc: function () {
+    // getBlendFunc: function () {
  //        return this._blendFunc;
  //    },
 
@@ -186,9 +186,9 @@ cl.MeshSprite = cc.Node.extend({
     //     return this._texture;
     // },
 
-	_render: function () {
-		if((this._buffer==null) || (this._buffer.length === 0)) 
-			return;
+    _render: function () {
+        if((this._buffer==null) || (this._buffer.length === 0)) 
+            return;
 
         var gl = cc._renderContext;
         
@@ -203,7 +203,7 @@ cl.MeshSprite = cc.Node.extend({
             this._dirty = false;
         }
 
-		for(var i=0; i<this._materials.length; i++){
+        for(var i=0; i<this._materials.length; i++){
             var indices = this._subMeshes[i];
             if(!indices || indices.length == 0)
                 continue;

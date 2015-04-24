@@ -40,15 +40,15 @@
     };
 
     SceneManager.loadScene = function(path, cb, force) {
-    	var json = _sceneMap[path];
+        var json = _sceneMap[path];
 
-    	var parseComplete = function(scene){
-			if(scene && cb) cb(scene);
-    	}
+        var parseComplete = function(scene){
+            if(scene && cb) cb(scene);
+        }
 
-    	if(json && !force){
-    		parseData(json, parseComplete);
-    	} else {
+        if(json && !force){
+            parseData(json, parseComplete);
+        } else {
             cc.loader.loadJson(path, function(err, json){
                 if(err) throw err;
 
@@ -77,10 +77,10 @@
     };
 
     SceneManager.parseData = function(json, cb){
-    	var data = json.root;
+        var data = json.root;
         var self = this;
 
-    	cc.LoaderScene.preload(data.res, function () {
+        cc.LoaderScene.preload(data.res, function () {
 
             var scene = new cc.Scene();
             scene.res = data.res;
@@ -102,33 +102,33 @@
     };
 
     SceneManager.parseGameObject = function(parent, data) {
-    	var o = new GameObject();
-    	parent.addChild(o);
+        var o = new GameObject();
+        parent.addChild(o);
 
-    	for(var i=0; i<data.components.length; i++) {
-    		this.parseComponent(o, data.components[i]);
-    	}
+        for(var i=0; i<data.components.length; i++) {
+            this.parseComponent(o, data.components[i]);
+        }
 
-    	if(data.children) {
-	    	for(var i=0; i<data.children.length; i++){
-	    		this.parseGameObject(o, data.children[i]);
-	    	}
-    	}
+        if(data.children) {
+            for(var i=0; i<data.children.length; i++){
+                this.parseGameObject(o, data.children[i]);
+            }
+        }
 
-    	return o;
+        return o;
     };
 
     SceneManager.parseComponent = function(parent, data) {
-    	var c = parent.addComponent(data.class);
+        var c = parent.addComponent(data.class);
         if(c == null) return null;
         
-    	for(var k in data) {
-    		if(k == "class") continue;
+        for(var k in data) {
+            if(k == "class") continue;
             
-    		c[k] = data[k];
-    	}
+            c[k] = data[k];
+        }
 
-    	return c;
+        return c;
     };
 
     var stringParsers = [
