@@ -42,23 +42,23 @@
             }
         },
 
-        addComponent : function(classname){
+        addComponent : function(className){
             var c;
 
-            if(typeof classname === 'string') {
-                c = this._components[classname];
+            if(typeof className === 'string') {
+                c = this._components[className];
                 if(c) return c;
 
-                c = cl.ComponentManager.create(classname);
+                c = cl.ComponentManager.create(className);
                 if(c == null){
-                    console.log(classname + "is not a valid Component");
+                    console.log(className + "is not a valid Component");
                     return null;
                 }
 
-                this._components[classname] = c;
-            } else if(typeof classname === 'object'){
-                c = classname;
-                this._components[c.classname] = c;
+                this._components[className] = c;
+            } else if(typeof className === 'object'){
+                c = className;
+                this._components[c.className] = c;
             }
 
             c._bind(this);
@@ -83,16 +83,16 @@
             }
         },
 
-        getComponent: function(classname){
-            return this._components[classname];
+        getComponent: function(className){
+            return this._components[className];
         },
 
-        removeComponent: function (classname) {
-            if(typeof classname === 'object') {
-                classname = classname.classname;
+        removeComponent: function (className) {
+            if(typeof className === 'object') {
+                className = className.className;
             }
 
-            var c = this._components[classname];
+            var c = this._components[className];
 
             if(c != null) {
                 c._unbind();
@@ -105,7 +105,7 @@
                 }
             }
 
-            this._components[classname] = null;
+            this._components[className] = null;
 
             return c;
         },

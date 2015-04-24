@@ -112,13 +112,18 @@
         var gs = params._get_set_;
         delete params._get_set_;
 
+        var folder = params._folder_
+        delete params._folder_;
+
         var ret = parent.extend(params);
 
         if(gs) {
             cl.defineGetterSetter(ret.prototype, gs);
         }
 
-        ret.className = className;
+        ret.prototype.className = ret.className = className;
+        ret.folder = folder;
+
         ComponentManager.register(className, ret);
 
         return ret;

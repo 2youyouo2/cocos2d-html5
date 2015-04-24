@@ -14,7 +14,6 @@
 
         register : function(name, cls){
             this._classes[name] = cls;
-            cls.prototype.classname = name;
         },
 
         unregister : function(name){
