@@ -41,6 +41,7 @@
 
     SceneManager.loadScene = function(path, cb, force) {
         var json = _sceneMap[path];
+        var self = this;
 
         var parseComplete = function(scene){
             if(scene && cb) cb(scene);
@@ -54,7 +55,7 @@
 
                 _sceneMap[path] = json;
                 
-                this.parseData(json, parseComplete);
+                self.parseData(json, parseComplete);
             }, this.tryReviver);
         }
     };

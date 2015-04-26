@@ -479,12 +479,13 @@
             "cocoslite/core/SceneManager.js",
             "cocoslite/component/Component.js",
             "cocoslite/component/ComponentManager.js",
+            "cocoslite/component/ColorComponent.js",
             "cocoslite/component/MeshComponent.js",
             "cocoslite/component/SpriteComponent.js",
             "cocoslite/component/TransformComponent.js",
             "cocoslite/object/MeshSprite.js"
         ],
-        
+
         "external" : ["box2d", "chipmunk", "socketio", "pluginx", "gaf"]
     },
     "bootFile" : "CCBoot.js"
