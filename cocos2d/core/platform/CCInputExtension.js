@@ -57,13 +57,13 @@ _p.setAccelerometerInterval = function(interval){
     }
 };
 
-_p._registerKeyboardEvent = function(){
-    cc._addEventListener(cc._canvas, "keydown", function (e) {
+_p._registerKeyboardEvent = function(element){
+    cc._addEventListener(element, "keydown", function (e) {
         cc.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, true));
         e.stopPropagation();
         e.preventDefault();
     }, false);
-    cc._addEventListener(cc._canvas, "keyup", function (e) {
+    cc._addEventListener(element, "keyup", function (e) {
         cc.eventManager.dispatchEvent(new cc.EventKeyboard(e.keyCode, false));
         e.stopPropagation();
         e.preventDefault();
