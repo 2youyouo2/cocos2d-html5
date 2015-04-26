@@ -10,8 +10,10 @@
     var Component = require("./Component.js");
 
     var ColorComponent = Component.extendComponent("ColorComponent", {
+        properties: ["color", "cascadeColor", "opacity", "cascadeOpacity"],
+
         ctor: function() {
-            this._super(["color", "cascadeColor", "opacity", "cascadeOpacity"]);
+            this._super();
         },
 
         _get_set_: {

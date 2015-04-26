@@ -8,6 +8,7 @@
     "use strict";
 
     var GameObject = cc.Node.extend({
+        properties: ["name", "tag"],
 
         ctor : function (){
             this._super();
@@ -16,30 +17,14 @@
             this._properties = [];
             this._updateRequest = 0;
 
-            // this.addProperties(["x", "y", "scaleX", "scaleY", "rotationX", "rotationY"]);
             this.name = "GameObject";
 
             this.addComponent("TransformComponent");
             
         },
 
-        _setProperties: function(val){
-            if(val.constructor == Array){
-                this._properties = val;
-            }
-        },
-        _getProperties: function(){
-            return this._properties;
-        },
-
         _getComponents: function(){
             return this._components;
-        },
-
-        addProperties : function (properties){
-            if(properties.constructor == Array){
-                this.properties = this.properties.concat(properties);
-            }
         },
 
         addComponent : function(className){
@@ -145,7 +130,6 @@
     });
 
     cl.defineGetterSetter(GameObject.prototype, "components", "_getComponents");
-    cl.defineGetterSetter(GameObject.prototype, "properties", "_getProperties", "_setProperties");
 
     module.exports = cl.GameObject = GameObject;
 });

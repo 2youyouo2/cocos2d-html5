@@ -10,8 +10,10 @@
     var Component = require("./Component.js");
 
     var TransformComponent = Component.extendComponent("TransformComponent", {
+        properties: ["position", "scale", "rotation"],
+        
         ctor: function() {
-            this._super(["position", "scale", "rotation"]);
+            this._super();
         },
 
         _get_set_: {

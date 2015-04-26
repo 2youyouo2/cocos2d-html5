@@ -106,6 +106,10 @@
         var o = new GameObject();
         parent.addChild(o);
 
+        o.properties.forEach(function(p) {
+            o[p] = data[p] === undefined ? o[p] : data[p];
+        });
+
         for(var i=0; i<data.components.length; i++) {
             this.parseComponent(o, data.components[i]);
         }

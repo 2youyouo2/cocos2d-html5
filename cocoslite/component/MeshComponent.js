@@ -16,7 +16,7 @@
             this._innerMesh = new cl.MeshSprite();
             this._innerMesh.retain();
             
-            this._super(this);
+            this._super();
         },
 
         _getMaterials: function() {

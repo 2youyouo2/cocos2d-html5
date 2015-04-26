@@ -10,12 +10,14 @@
     var Component = require("./Component.js");
 
     var SpriteComponent = Component.extendComponent("SpriteComponent", {
+        properties: ["sprite", "anchorPoint"],
+        
         ctor: function () {
             
             this._anchorPoint = new cl.p(0.5, 0.5);
             this._innerSprite = new cc.Sprite();
             
-            this._super(["sprite", "anchorPoint"]);
+            this._super();
         },
 
         _setSprite: function(file) {

@@ -9,10 +9,9 @@
     
     var ComponentManager = require("./ComponentManager.js");
 
-    var ctor = function(properties, dependencies) {
+    var ctor = function(dependencies) {
         var self = this;
 
-        var _properties      = properties ? properties : [];
         var _dependencies    = dependencies ? dependencies : [];
         var _target          = null;
         var _exportedMethods = null;
@@ -27,15 +26,6 @@
                 return _target.getComponent(className);
             return null;
         },
-
-        this.addProperties = function (properties){
-            if(properties.constructor == Array){
-                if(!_properties) {
-                    _properties = [];
-                }
-                _properties = _properties.concat(properties);
-            }
-        };
 
         this._bind = function(target){
             _target = target;
@@ -74,15 +64,6 @@
 
 
         cl.defineGetterSetter(this, {
-            "properties": {
-                get: function() {
-                    return _properties;
-                },
-                set: function(val) {
-                    _properties = val;
-                }
-            },
-
             "target": {
                 get: function() {
                     return _target;
@@ -92,6 +73,8 @@
     }
 
     var Component = cc.Class.extend({
+        properties: [],
+        
         ctor:ctor,
         
         onBind: function(target) {
