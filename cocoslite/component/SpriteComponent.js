@@ -19,7 +19,11 @@
         },
 
         _setSprite: function(file) {
-            this._innerSprite.initWithFile(file);
+            if(file !== "") {
+                this._innerSprite.initWithFile(file);
+            } else {
+                this._innerSprite.setTexture(null);
+            }
         },
         _getSprite: function(){
             return this._innerSprite;

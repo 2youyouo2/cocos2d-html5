@@ -416,7 +416,7 @@
 
     proto.rendering = function (ctx) {
         var node = this._node, locTexture = node._texture;
-        if ((locTexture &&!locTexture._textureLoaded) || this._displayedOpacity === 0)
+        if (!locTexture || (locTexture &&!locTexture._textureLoaded) || this._displayedOpacity === 0)
             return;
 
         var gl = ctx || cc._renderContext ;

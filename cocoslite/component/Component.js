@@ -57,7 +57,7 @@
                 }
             }
 
-            this.onUnbind();
+            this.onUnbind(_target);
         };
 
         this._exportMethods = function (methods) {

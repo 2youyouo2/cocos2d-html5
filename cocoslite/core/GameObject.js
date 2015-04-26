@@ -105,7 +105,7 @@
                 }
             }
 
-            this._components[className] = null;
+            delete this._components[className];
 
             return c;
         },
