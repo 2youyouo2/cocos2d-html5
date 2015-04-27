@@ -143,14 +143,10 @@ cl.Point.prototype.inTriangle = function(a, b, c){
         ac = c.sub(a), 
         ap = this.sub(a);
 
-    //用矢量积计算面积，下面4个值的绝对值，是对应的三角形的面积的两倍，
-
     var abc = ab.cross(ac);
     var abp = ab.cross(ap);
     var apc = ap.cross(ac);
-    var pbc = abc - abp - apc;   //等于pb.cross(pc)
-
-    //面积法：4个三角形的面积差 等于 0
+    var pbc = abc - abp - apc;  
 
     var delta = Math.abs(abc) - Math.abs(abp) - Math.abs(apc) - Math.abs(pbc);
 

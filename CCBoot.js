@@ -1995,10 +1995,7 @@ cc._setup = function (el, width, height) {
      */
     cc.view = cc.EGLView._getInstance();
     // register system events
-    if(cc._fgCanvas)
-        cc.inputManager.registerSystemEvent(cc._fgCanvas);
-    else
-        cc.inputManager.registerSystemEvent(cc._canvas);
+    cc.inputManager.registerSystemEvent(cc._canvas);
 
     /**
      * @type {cc.Director}
