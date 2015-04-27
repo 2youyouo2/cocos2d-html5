@@ -62,7 +62,6 @@
             }
         };
 
-
         cl.defineGetterSetter(this, {
             "target": {
                 get: function() {
@@ -85,9 +84,98 @@
         },
         onEnter: function(target) {
 
+        },
+
+        toJSON: function(){
+            var json = {};
+            json.class = this.className;
+
+            for(var i=0; i<this.properties.length; i++){
+                var k = this.properties[i];
+
+                var value = this[k];
+
+                if(this["toJSON"+k]) {
+                    json[k] = this["toJSON"+k]();
+                }
+                else if(value !== null || value !== undefined){
+                    json[k] = value.toJSON ? value.toJSON() : value;
+                }
+            }
+            return json;
         }
     });
 
+
+    var _deserializeFuncs = [];
+
+    Component.fromJSON = function(parent, json) {
+        var c = parent.addComponent(json.class);
+        if(c == null) return null;
+        
+        for(var k in json) {
+            if(k == "class") continue;
+            
+            var value = json[k];
+
+            for(var i=0; i<_deserializeFuncs.length; i++) {
+                var ret;
+                try {
+                    ret = _deserializeFuncs[i](k, value);
+                }
+                catch(e) {
+                    console.log("SceneManager.tryReviver for [%s]failed : ", k, e);
+                }
+                
+                if(ret) {
+                    value = ret;
+                }
+            }
+
+            c[k] = value;
+        }
+
+        return c;
+    };
+
+    Component.registerDeserialize = function(func) {
+        _deserializeFuncs.push(func);
+    };
+
+
+    var stringParsers = [
+        {
+            re: /#?([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/,
+            parse: function(execResult) {
+                return cc.color(execResult[0]);
+            }
+        },
+        {
+            re: /cl.Enum.(\w*)+\.(\w*)+/,
+            parse: function(execResult) {
+                return cl.Enum[execResult[1]][execResult[2]];
+            }
+        }
+    ];
+
+    // register default deserialize
+    Component.registerDeserialize(function(key, value) {
+
+        var ret = null;
+
+        if(typeof value === 'string') {
+
+            stringParsers.forEach(function(parser) {
+                var match = parser.re.exec(value);
+
+                if(match) {
+                    ret = parser.parse(match);
+                }
+            });
+        }
+
+        return ret;
+    });
 
     Component.extendComponent = function(className, params, parent) {
         if(!parent) parent = Component;

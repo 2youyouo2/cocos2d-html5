@@ -7,6 +7,8 @@
 })(function(require, exports, module) {
     "use strict";
 
+    var Component = require("../component/Component.js");
+
     var GameObject = cc.Node.extend({
         properties: ["name", "tag"],
 
@@ -126,8 +128,64 @@
             }
 
             return false;
+        },
+
+        toJSON: function(){
+            var json = {};
+
+            var components = json.components = [];
+
+            var cs = this.components;
+            for(var i in cs) {
+                components.push(cs[i].toJSON());
+            }
+
+            for(var k=0; k<this.children.length; k++){
+                var child = this.children[k];
+                if(child.constructor === cl.GameObject){
+                    
+                    if(!json.children) {
+                        json.children = [];
+                    }
+
+                    var cj = child.toJSON();
+                    json.children.push(cj);
+                }
+            }
+
+            var self = this;
+            this.properties.forEach(function(p) {
+                json[p] = self[p];
+            });
+
+            return json;
+        },
+
+        clone: function() {
+            var json = this.toJSON();
+            return GameObject.fromJSON(json);
         }
     });
+
+    GameObject.fromJSON = function(json) {
+        var o = new GameObject();
+
+        o.properties.forEach(function(p) {
+            o[p] = json[p] === undefined ? o[p] : json[p];
+        });
+
+        for(var i=0; i<json.components.length; i++) {
+            Component.fromJSON(o, json.components[i]);
+        }
+
+        if(json.children) {
+            for(var i=0; i<json.children.length; i++){
+                GameObject.fromJSON(o, json.children[i]);
+            }
+        }
+
+        return o;
+    };
 
     cl.defineGetterSetter(GameObject.prototype, "components", "_getComponents");
 

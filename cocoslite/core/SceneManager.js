@@ -11,33 +11,11 @@
 
     // private
     var _sceneMap = {};
-    var _deserializeFuncs = [];
 
     // SceneManager
     var SceneManager = {};
 
-    SceneManager.registerDeserialize = function(func) {
-        _deserializeFuncs.push(func);
-    };
 
-    SceneManager.tryReviver = function(key, value) {
-        var funcs = _deserializeFuncs;
-        for(var i=0; i<funcs.length; i++) {
-            var ret;
-            try {
-                ret = funcs[i](key, value);
-            }
-            catch(e) {
-                console.log("SceneManager.tryReviver for [%s]failed : ", key, e);
-            }
-            
-            if(ret) {
-                return ret;
-            }
-        }
-
-        return value;
-    };
 
     SceneManager.loadScene = function(path, cb, force) {
         var json = _sceneMap[path];
@@ -56,14 +34,14 @@
                 _sceneMap[path] = json;
                 
                 self.parseData(json, parseComplete);
-            }, this.tryReviver);
+            });
         }
     };
 
     SceneManager.loadSceneWithContent = function(content, cb) {
 
         try{
-            var json = JSON.parse(content, this.tryReviver); 
+            var json = JSON.parse(content); 
 
             var parseComplete = function(scene){
                 if(scene && cb) cb(scene);
@@ -92,7 +70,8 @@
             }
 
             for(var i=0; i<data.children.length; i++){
-                self.parseGameObject(parent, data.children[i]);
+                var o = GameObject.fromJSON(data.children[i]);
+                parent.addChild(o);
             }
 
             if(cb) {
@@ -101,74 +80,6 @@
 
         }, this);
     };
-
-    SceneManager.parseGameObject = function(parent, data) {
-        var o = new GameObject();
-        parent.addChild(o);
-
-        o.properties.forEach(function(p) {
-            o[p] = data[p] === undefined ? o[p] : data[p];
-        });
-
-        for(var i=0; i<data.components.length; i++) {
-            this.parseComponent(o, data.components[i]);
-        }
-
-        if(data.children) {
-            for(var i=0; i<data.children.length; i++){
-                this.parseGameObject(o, data.children[i]);
-            }
-        }
-
-        return o;
-    };
-
-    SceneManager.parseComponent = function(parent, data) {
-        var c = parent.addComponent(data.class);
-        if(c == null) return null;
-        
-        for(var k in data) {
-            if(k == "class") continue;
-            
-            c[k] = data[k];
-        }
-
-        return c;
-    };
-
-    var stringParsers = [
-        {
-            re: /#?([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/,
-            parse: function(execResult) {
-                return cc.color(execResult[0]);
-            }
-        },
-        {
-            re: /cl.Enum.(\w*)+\.(\w*)+/,
-            parse: function(execResult) {
-                return cl.Enum[execResult[1]][execResult[2]];
-            }
-        }
-    ];
-
-    // register default reviver
-    SceneManager.registerDeserialize(function(key, value) {
-
-        var ret = null;
-
-        if(typeof value === 'string') {
-
-            stringParsers.forEach(function(parser) {
-                var match = parser.re.exec(value);
-
-                if(match) {
-                    ret = parser.parse(match);
-                }
-            });
-        }
-
-        return ret;
-    });
 
     module.exports = cl.SceneManager = SceneManager;
 });
