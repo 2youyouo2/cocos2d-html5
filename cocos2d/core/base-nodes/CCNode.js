@@ -1386,20 +1386,22 @@ cc.Node = cc.Class.extend(/** @lends cc.Node# */{
             for (var i = 0; i < __children.length; i++) {
                 var node = __children[i];
                 if (node) {
-                    // IMPORTANT:
-                    //  -1st do onExit
-                    //  -2nd cleanup
                     if (this._running) {
                         node.onExitTransitionDidStart();
                         node.onExit();
                     }
+
+                    // If you don't do cleanup, the node's actions will not get removed and the
                     if (cleanup)
                         node.cleanup();
+
                     // set parent nil at the end
                     node.parent = null;
+                    node._renderCmd.detachFromParent();
                 }
             }
             this._children.length = 0;
+            cc.renderer.childrenOrderDirty = true;
         }
     },
 
