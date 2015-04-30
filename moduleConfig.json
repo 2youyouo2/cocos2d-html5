@@ -477,6 +477,7 @@
             "cocoslite/shortcode.js",
             "cocoslite/core/GameObject.js",
             "cocoslite/core/SceneManager.js",
+            "cocoslite/core/KeyManager.js",
             "cocoslite/component/Component.js",
             "cocoslite/component/ComponentManager.js",
             "cocoslite/component/ColorComponent.js",
