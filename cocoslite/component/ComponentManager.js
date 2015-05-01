@@ -9,19 +9,19 @@
     
     var ComponentManager = cc.Class.extend({
         ctor : function () {
-            this._classes = new Array();
+            this._classes = [];
         },
 
-        register : function(name, cls){
-            this._classes[name] = cls;
+        register : function(className, cls){
+            this._classes[className] = cls;
         },
 
-        unregister : function(name){
-            this._classes[name] = null;
+        unregister : function(className){
+            delete this._classes[className];
         },
 
-        create : function (name) {
-            var cls = this._classes[name];
+        create : function (className) {
+            var cls = this._classes[className];
 
             if(cls != null)
                 return new cls(arguments);
@@ -31,6 +31,10 @@
 
         getAllClasses: function(){
             return this._classes;
+        },
+
+        clear: function() {
+            this._classes = [];
         }
     });
 

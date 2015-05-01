@@ -7,7 +7,7 @@
 })(function(require, exports, module) {
     "use strict";
     
-    var Component = require("./Component.js");
+    var Component = require("../Component.js");
 
     var MeshComponent = Component.extendComponent("MeshComponent", {
         ctor: function () {

@@ -7,7 +7,7 @@
 })(function(require, exports, module) {
     "use strict";
     
-    var Component = require("./Component.js");
+    var Component = require("../Component.js");
 
     var SpriteComponent = Component.extendComponent("SpriteComponent", {
         properties: ["sprite", "anchorPoint"],

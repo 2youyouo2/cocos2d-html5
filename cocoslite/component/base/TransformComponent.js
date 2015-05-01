@@ -7,7 +7,7 @@
 })(function(require, exports, module) {
     "use strict";
     
-    var Component = require("./Component.js");
+    var Component = require("../Component.js");
 
     var TransformComponent = Component.extendComponent("TransformComponent", {
         properties: ["position", "scale", "rotation"],

@@ -7,7 +7,7 @@
 })(function(require, exports, module) {
     "use strict";
     
-    var Component = require("./Component.js");
+    var Component = require("../Component.js");
 
     var ColorComponent = Component.extendComponent("ColorComponent", {
         properties: ["color", "cascadeColor", "opacity", "cascadeOpacity"],

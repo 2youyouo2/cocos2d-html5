@@ -480,10 +480,10 @@
             "cocoslite/core/KeyManager.js",
             "cocoslite/component/Component.js",
             "cocoslite/component/ComponentManager.js",
-            "cocoslite/component/ColorComponent.js",
-            "cocoslite/component/MeshComponent.js",
-            "cocoslite/component/SpriteComponent.js",
-            "cocoslite/component/TransformComponent.js",
+            "cocoslite/component/base/ColorComponent.js",
+            "cocoslite/component/base/MeshComponent.js",
+            "cocoslite/component/base/SpriteComponent.js",
+            "cocoslite/component/base/TransformComponent.js",
             "cocoslite/object/MeshSprite.js"
         ],
 
