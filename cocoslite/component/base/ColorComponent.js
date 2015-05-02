@@ -69,5 +69,5 @@
         _folder_: "base"
     });
 
-    exports.Component = ColorComponent;
+    module.exports = ColorComponent;
 });

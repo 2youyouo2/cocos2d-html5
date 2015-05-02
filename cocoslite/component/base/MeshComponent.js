@@ -88,6 +88,6 @@
     cl.defineGetterSetter(_p, "vertices", "_getVertices", "_setVertices");
     cl.defineGetterSetter(_p, "subMeshes", "_getSubMeshes");
 
-    exports.Component = MeshComponent;
+    module.exports = MeshComponent;
 });
 

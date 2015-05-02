@@ -70,5 +70,5 @@
     cl.defineGetterSetter(_p, "anchorPoint", "_getAnchorPoint", "_setAnchorPoint");
     cl.defineGetterSetter(_p, "boundingBox", "_getBoundingBox", null);
 
-    exports.Component = SpriteComponent;
+    module.exports = SpriteComponent;
 });

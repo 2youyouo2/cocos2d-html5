@@ -875,6 +875,10 @@ var Shape = cp.Shape = function(body) {
 	// Copy the collision code from the prototype into the actual object. This makes collision
 	// function lookups slightly faster.
 	this.collisionCode = this.collisionCode;
+
+	if(this.init) {
+		this.init();
+	}
 };
 
 Shape.prototype.setElasticity = function(e) { this.e = e; };
@@ -1608,6 +1612,7 @@ if (typeof DEBUG !== 'undefined' && DEBUG) {
 Body.prototype.getPos = function() { return this.p; };
 Body.prototype.getVel = function() { return new Vect(this.vx, this.vy); };
 Body.prototype.getAngVel = function() { return this.w; };
+Body.prototype.getAngle = function() { return this.a; };
 
 /// Returns true if the body is sleeping.
 Body.prototype.isSleeping = function()

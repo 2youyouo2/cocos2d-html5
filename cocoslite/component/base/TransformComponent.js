@@ -58,9 +58,11 @@
                     if(y) {
                         this.target.rotationX = val;
                         this.target.rotationY = y;
-                    } else {
+                    } else if(val.x !== undefined) {
                         this.target.rotationX = val.x;
                         this.target.rotationY = val.y;
+                    } else {
+                        this.target.rotation = val;
                     }
                 }
             },
@@ -124,5 +126,5 @@
         _folder_: "base"
     });
 
-    exports.Component = TransformComponent;
+    module.exports = TransformComponent;
 });
