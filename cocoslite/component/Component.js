@@ -15,6 +15,7 @@
         var _dependencies    = dependencies ? dependencies : [];
         var _target          = null;
         var _exportedMethods = null;
+        var _entered         = false;
 
         this.addComponent = function(className){
             if(_target)
@@ -48,6 +49,15 @@
             }
 
             this.onUnbind(_target);
+        };
+
+        this._enter = function() {
+            if(_entered) {
+                return;
+            }
+
+            _entered = true;
+            this.onEnter(_target);
         };
 
         this._exportMethods = function (methods) {
@@ -183,7 +193,7 @@
         var gs = params._get_set_;
         delete params._get_set_;
 
-        var folder = params._folder_
+        var folder = params._folder_ ? params._folder_ : parent.folder;
         delete params._folder_;
 
         var ret = parent.extend(params);

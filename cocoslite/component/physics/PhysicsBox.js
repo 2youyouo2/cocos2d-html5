@@ -21,19 +21,6 @@
             this._height = 50;
         },
 
-        updateBox: function() {
-            var verts = this.createVerts();
-
-            // if(this._shape.setVerts) {
-            //     this._shape.setVerts(verts, cp.vzero);
-            // } else {
-                cl.space.removeShape(this._shape);
-                this._shape = this.createShape();
-                cl.space.addShape(this._shape);
-            // }
-
-        },
-
         createVerts: function() {
             var hw = this._width/2;
             var hh = this._height/2;
@@ -59,7 +46,6 @@
                 },
                 set: function(val) {
                     this._width = val;
-                    this.updateBox();
                 }
             },
 
@@ -69,7 +55,6 @@
                 },
                 set: function(val) {
                     this._height = val;
-                    this.updateBox();
                 }
             }
         }

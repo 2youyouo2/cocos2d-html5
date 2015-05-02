@@ -7,25 +7,32 @@
 })(function(require, exports, module) {
     "use strict";
     
-    var Component = require("../Component.js");
+    var Component       = require("../Component.js");
 
     var PhysicsBody = Component.extendComponent("PhysicsBody", {
-        properties: [],
+        properties: ['static', 'mess', 'moment'],
 
         ctor: function() {
             this._super();
 
+            this._static = false;
+            this._mess = 1;
+            this._moment = 1000;
             this._duringUpdate = false;
-
-            this._body = new cp.Body(1, cp.momentForBox(1, 48, 108) );
-            cl.space.addBody( this._body );
         },
 
         getBody: function() {
             return this._body;
         },
 
-        onBind: function(target) {
+        onEnter: function(target) {
+            if(this._static) {
+                this._body = cl.space.staticBody;
+            } else {
+                this._body = new cp.Body(this._mess, this._moment );
+                cl.space.addBody( this._body );
+            }
+
             var self = this;
 
             this.t = this.getComponent("TransformComponent");
@@ -34,7 +41,7 @@
             target.setPosition = function(x, y) {
                 this._originSetPosition.apply(this, arguments);
 
-                if(self._duringUpdate) {
+                if(self._duringUpdate || !self._body) {
                     return;
                 }
 
@@ -49,7 +56,7 @@
             target.setRotation = function(r) {
                 this._originSetRotation.apply(this, arguments);
 
-                if(self._duringUpdate) {
+                if(self._duringUpdate || !self._body) {
                     return;
                 }
 
@@ -61,14 +68,6 @@
 
             target.position = target.position;
             target.rotation = target.rotation;
-        },
-
-        onUnbind: function(target) {
-            target.setPosition = target._originSetPosition;
-            target.setRotation = target._originSetRotation;
-
-            cl.defineGetterSetter(target, "position", target.getPosition, target.setPosition);
-            cl.defineGetterSetter(target, "rotation", target.getRotation, target.setRotation);
         },
 
         _syncPosition:function () {
@@ -87,6 +86,10 @@
         },
 
         onUpdate: function(dt) {
+            if(this._static) {
+                return;
+            }
+
             this._duringUpdate = true;
 
             this._syncPosition();
@@ -95,10 +98,48 @@
             this._duringUpdate = false;
         },
 
+        _get_set_: {
+            'static': {
+                get: function() {
+                    return this._static;
+                },
+
+                set: function(val) {
+                    this._static = val;
+                }
+            },
+
+            'mess': {
+                get: function() {
+                    return this._static;
+                },
+
+                set: function(val) {
+                    this._static = val;
+
+                    if(this._body && this._static) {
+                        this._body.setMess(val);
+                    }
+                }
+            },
+
+            'moment': {
+                get: function() {
+                    return this._static;
+                },
+
+                set: function(val) {
+                    this._static = val;
+
+                    if(this._body && this._static) {
+                        this._body.setMoment(val);
+                    }
+                }
+            }
+        },
+
         _folder_: "physics"
     });
-
-    module.exports = PhysicsBody;
 
     module.exports = PhysicsBody;
 });

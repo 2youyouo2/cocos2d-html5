@@ -48,7 +48,9 @@
                 this._components[c.className] = c;
             }
 
+
             c._bind(this);
+            this._components.push(c);
 
             if(c.onUpdate) {
                 if(this._updateRequest === 0 && this.isRunning()) {
@@ -58,7 +60,7 @@
             }
 
             if(this.isRunning()) {
-                c.onEnter(this);
+                c._enter(this);
             }
 
             return c;
@@ -90,9 +92,12 @@
                         this.unscheduleUpdate();
                     }
                 }
-            }
 
-            delete this._components[className];
+
+                delete this._components[className];
+                var index = this._components.indexOf(c);
+                this._components.splice(index, 1);
+            }
 
             return c;
         },
@@ -100,8 +105,8 @@
         onEnter: function() {
             cc.Node.prototype.onEnter.call(this);
 
-            for(var key in this._components){
-                this._components[key].onEnter(this);
+            for(var i=0; i<this._components.length; i++){
+                this._components[i]._enter(this);
             }
 
             if(this._updateRequest > 0) {
@@ -136,7 +141,7 @@
             var components = json.components = [];
 
             var cs = this.components;
-            for(var i in cs) {
+            for(var i=0; i<cs.length; i++) {
                 components.push(cs[i].toJSON());
             }
 

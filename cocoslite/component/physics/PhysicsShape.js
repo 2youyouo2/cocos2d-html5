@@ -15,26 +15,38 @@
         ctor: function() {
             this._super(['PhysicsBody']);
 
-            this._shape = null;
-            this._sensor = false;
+            this._shape      = null;
+            this._sensor     = false;
+            this._elasticity = 0;
+            this._friction   = 0;
         },
 
         getBody: function() {
-            return this.getComponent('PhysicsBody').getBody();
+            return this._physicsBody.getBody();
         },
 
         createShape: function() {
             return null;
         },
 
-        onBind: function(target) {
+        updateShape: function() {
+            if(!this._physicsBody) {
+                return;
+            }
+
+            if(this._shape) {
+                cl.space.removeShape(this._shape);
+            }
+
             this._shape = this.createShape();
-            cl.space.addShape( this._shape );
+            
+            cl.space.addShape(this._shape);
         },
 
-        onUnbind: function(target) {
-            cl.space.removeShape( this._shape );
-            this._shape = null;
+        onEnter: function(target) {
+            this._physicsBody = this.getComponent('PhysicsBody');
+
+            this.updateShape();
         },
 
         _get_set_: {
@@ -54,31 +66,27 @@
 
             elasticity: {
                 get: function() {
-                    if(!this._shape) {
-                        return 0;
-                    }
-                    return this._shape.e;
+                    return this._elasticity;
                 },
                 set: function(val) {
-                    if(!this._shape) {
-                        return;
+                    this._elasticity = val;
+
+                    if(this._shape) {
+                        this._shape.setElasticity(val);
                     }
-                    this._shape.setElasticity(val);
                 }
             },
 
             friction: {
                 get: function() {
-                    if(!this._shape) {
-                        return 0;
-                    }
-                    return this._shape.u;
+                    return this._friction;
                 },
                 set: function(val) {
-                    if(!this._shape) {
-                        return;
+                    this._friction = val;
+
+                    if(this._shape) {
+                        this._shape.setFriction(val);
                     }
-                    this._shape.setFriction(val);
                 }
             }
         },

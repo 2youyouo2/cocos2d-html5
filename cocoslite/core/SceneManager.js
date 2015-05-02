@@ -57,7 +57,7 @@
 
     SceneManager.initPhysics = function(scene, data) {
         scene.physics = data;
-        cl.space = new cp.Space();
+        scene.space = cl.space = new cp.Space();
 
         var space = cl.space ;
         // var staticBody = space.staticBody;
