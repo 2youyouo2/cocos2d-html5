@@ -111,11 +111,11 @@
 
             'mess': {
                 get: function() {
-                    return this._static;
+                    return this._mess;
                 },
 
                 set: function(val) {
-                    this._static = val;
+                    this._mess = val;
 
                     if(this._body && this._static) {
                         this._body.setMess(val);
@@ -125,11 +125,11 @@
 
             'moment': {
                 get: function() {
-                    return this._static;
+                    return this._moment;
                 },
 
                 set: function(val) {
-                    this._static = val;
+                    this._moment = val;
 
                     if(this._body && this._static) {
                         this._body.setMoment(val);
