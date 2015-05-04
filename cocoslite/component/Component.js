@@ -193,8 +193,14 @@
         var gs = params._get_set_;
         delete params._get_set_;
 
-        var folder = params._folder_ ? params._folder_ : parent.folder;
+        var _folder_ = params._folder_ ? params._folder_ : parent._folder_;
         delete params._folder_;
+
+        var abstract = params._abstract_;
+        delete params._abstract_;
+
+        var _show_ = params._show_ ? params._show_ : parent._show_;
+        delete params._show_;
 
         var ret = parent.extend(params);
 
@@ -203,9 +209,12 @@
         }
 
         ret.prototype.className = ret.className = className;
-        ret.folder = folder;
+        ret._folder_ = _folder_;
+        ret._show_ = _show_;
 
-        ComponentManager.register(className, ret);
+        if(!abstract) {
+            ComponentManager.register(className, ret);
+        }
 
         return ret;
     }

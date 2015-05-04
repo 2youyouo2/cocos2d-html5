@@ -39,6 +39,20 @@ cl = cl ? cl : {};
 
     cl.defineGetterSetter(cc.Node.prototype, "name", "getName", "setName");
 
+    cl.config = {};
+
+    cl.readConfig = function() {
+        cl.config = {};
+
+        var path = cc.path.join(cc.loader.resPath, 'project.json');
+
+        cc.loader.loadJson(path, function(err, json){
+            if(err) throw err;
+
+            cl.config['physics'] = json['physics'] ? json['physics'] : 'None';
+        });
+    }
+
 });
 
 

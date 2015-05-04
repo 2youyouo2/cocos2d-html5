@@ -91,7 +91,12 @@
             }
         },
 
-        _folder_: "physics"
+        _show_: function() {
+            return cl.config.physics === 'Chipmunk';
+        },
+
+        _folder_: "physics",
+        _abstract_: true
     });
 
     module.exports = PhysicsShape;

@@ -138,6 +138,9 @@
             }
         },
 
+        _show_: function() {
+            return cl.config.physics === 'Chipmunk';
+        },
         _folder_: "physics"
     });
 
