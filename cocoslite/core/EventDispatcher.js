@@ -39,6 +39,17 @@
     }
 })(function(require, exports, module) {
     "use strict";
+
+    function extend(target, ref) {
+        var name, value;
+        for ( name in ref ) {
+            value = ref[name];
+            if (value !== undefined) {
+                target[ name ] = value;
+            }
+        }
+        return target;
+    }
     
     
     /**
@@ -215,7 +226,7 @@
      * @param {!Object} obj Object to add event-dispatch methods to
      */
     function makeEventDispatcher(obj) {
-        $.extend(obj, {
+        extend(obj, {
             on: on,
             off: off,
             one: one,

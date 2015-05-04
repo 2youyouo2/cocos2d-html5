@@ -100,15 +100,20 @@
             var json = {};
             json.class = this.className;
 
-            for(var i=0; i<this.properties.length; i++){
-                var k = this.properties[i];
+            var serialization = this.properties;
+            if(this.serialization) {
+                serialization = this.serialization.concat(this.properties);
+            }
+
+            for(var i=0; i<serialization.length; i++){
+                var k = serialization[i];
 
                 var value = this[k];
 
                 if(this["toJSON"+k]) {
                     json[k] = this["toJSON"+k]();
                 }
-                else if(value !== null || value !== undefined){
+                else if(value !== null && value !== undefined){
                     json[k] = value.toJSON ? value.toJSON() : value;
                 }
             }
@@ -128,18 +133,9 @@
             
             var value = json[k];
 
-            for(var i=0; i<_deserializeFuncs.length; i++) {
-                var ret;
-                try {
-                    ret = _deserializeFuncs[i](k, value);
-                }
-                catch(e) {
-                    console.log("SceneManager.tryReviver for [%s]failed : ", k, e);
-                }
-                
-                if(ret) {
-                    value = ret;
-                }
+            var ret = Component.tryReviver(k, value);
+            if(ret) {
+                value = ret;
             }
 
             c[k] = value;
@@ -151,6 +147,23 @@
     Component.registerDeserialize = function(func) {
         _deserializeFuncs.push(func);
     };
+
+    Component.tryReviver = function(key, value) {
+        for(var i=0; i<_deserializeFuncs.length; i++) {
+            try {
+                var ret = _deserializeFuncs[i](key, value);
+
+                if(ret) {
+                    return ret;
+                }
+            }
+            catch(e) {
+                console.log("Component.tryReviver for [%s]failed : ", key, e);
+            }
+        }
+
+        return value;
+    }
 
 
     var stringParsers = [

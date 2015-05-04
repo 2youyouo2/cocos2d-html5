@@ -10,8 +10,10 @@
     var Component = require("../Component.js");
 
     var MeshComponent = Component.extendComponent("MeshComponent", {
+        // properties: ["materials"],
+        // serialization: ["subMeshes", "vertices"],
+
         ctor: function () {
-            // this.properties = ["materials", "subMeshes", "vertices"];
             
             this._innerMesh = new cl.MeshSprite();
             this._innerMesh.retain();
@@ -24,9 +26,6 @@
         },
         _setMaterials: function(materials) {
             this._innerMesh.materials = materials;
-        },
-        toJSONmaterrials: {
-
         },
 
         setSubMesh: function(index, indices) {

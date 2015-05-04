@@ -44,28 +44,24 @@ cl.MeshSprite = cc.Node.extend({
     _blendFunc: null,
     _dirty: false,
 
-    _materials: TextureArray(),
+    _materials: null,
 
-    _subMeshes: [],
+    _subMeshes: null,
 
     _className: "MeshSprite",
 
     ctor: function(){
         cc.Node.prototype.ctor.call(this);
         
-        this.init();
-    },
+        this._buffer       = [];
+        this._materials    = TextureArray();
+        this._subMeshes    = [];
+        this._buffersVBO   = [];
 
-    init: function() {
-        if (cc.Node.prototype.init.call(this)) {
-            var locCmd = this._renderCmd;
-            this._blendFunc = new cc.BlendFunc(cc.BLEND_SRC, cc.BLEND_DST);
+        var locCmd         = this._renderCmd;
+        this._blendFunc    = new cc.BlendFunc(cc.BLEND_SRC, cc.BLEND_DST);
 
-            this.shaderProgram = cc.shaderCache.programForKey(cc.SHADER_POSITION_TEXTURECOLOR);
-            this._buffersVBO = [];
-            return true;
-        }
-        return false;
+        this.shaderProgram = cc.shaderCache.programForKey(cc.SHADER_POSITION_TEXTURECOLOR);
     },
 
     setSubMesh: function(index, indices){
@@ -79,7 +75,7 @@ cl.MeshSprite = cc.Node.extend({
     _setVertices: function(vertices){
         var VertexLength = cc.V3F_C4B_T2F.BYTES_PER_ELEMENT;
 
-        this._buffer = [];
+        this._buffer.splice(0, this._buffer.length);
 
         this._trianglesArrayBuffer = new ArrayBuffer(VertexLength * vertices.length);
         this._trianglesReader = new Uint8Array(this._trianglesArrayBuffer);

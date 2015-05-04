@@ -2,8 +2,8 @@ cl.EnumValue = function(Enum, key, value) {
     this.Enum = Enum;
     this.value = value;
     
-    this.toString = function() {
-        return 'cl.Enum' + Enum.name + '.' + key;
+    this.toJSON = this.toString = function() {
+        return 'cl.Enum.' + Enum.name + '.' + key;
     }
 }
 
