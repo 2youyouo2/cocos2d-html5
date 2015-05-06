@@ -14,7 +14,7 @@
 
     // serialize function
 
-    cc.Sprite.prototype.toJSON = cc.Sprite.prototype._pGet = function() {
+    cc.Sprite.prototype.toJSON  = function() {
         var texture = this.getTexture();
         return texture ? texture.url : "";
     };
