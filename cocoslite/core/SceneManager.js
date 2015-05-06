@@ -72,7 +72,7 @@
         if(scene.canvas) {
             parent = scene.canvas;
         }
-        parent.addChild( debugNode );
+        parent.addChild( debugNode, 10000 );
 
         scene.scheduleUpdate();
         scene.update = function( delta ) {

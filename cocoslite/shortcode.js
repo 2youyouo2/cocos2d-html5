@@ -185,3 +185,17 @@ Math.clamp = function(value, min, max)
     }
     return value;
 }
+
+Array.prototype.reverse = function() {
+    var temp = [];
+    
+    for(var i=0; i<this.length; i++) {
+        temp.unshift(this[i]);
+    }
+
+    return temp;
+}
+
+Number.prototype.toFixed = function(pos) {
+    return Math.round( this * Math.pow(10, pos) ) / Math.pow(10, pos);
+}
