@@ -115,7 +115,7 @@
                 },
 
                 set: function(val) {
-                    this._mess = val;
+                    this._mess = val ? val : Infinity;
 
                     if(this._body && this._static) {
                         this._body.setMess(val);
@@ -129,7 +129,7 @@
                 },
 
                 set: function(val) {
-                    this._moment = val;
+                    this._moment = val ? val : Infinity;
 
                     if(this._body && this._static) {
                         this._body.setMoment(val);

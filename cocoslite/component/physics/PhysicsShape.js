@@ -15,7 +15,7 @@
         ctor: function() {
             this._super(['PhysicsBody']);
 
-            this._shape      = null;
+            this._shapes     = [];
             this._sensor     = false;
             this._elasticity = 0;
             this._friction   = 0;
@@ -23,6 +23,10 @@
 
         getBody: function() {
             return this._physicsBody.getBody();
+        },
+
+        getShapes: function() {
+            return this._shapes;
         },
 
         createShape: function() {
@@ -34,13 +38,18 @@
                 return;
             }
 
-            if(this._shape) {
-                cl.space.removeShape(this._shape);
-            }
+            this._shapes.forEach(function(shape) {
+                cl.space.removeShape(shape);
+            });
 
-            this._shape = this.createShape();
+            this._shapes = this.createShape();
+            if(!Array.isArray(this._shapes)) {
+                this._shapes = [this._shapes];
+            }
             
-            cl.space.addShape(this._shape);
+            this._shapes.forEach(function(shape) {
+                cl.space.addShape(shape);
+            });
         },
 
         onEnter: function(target) {
@@ -57,10 +66,9 @@
                 set: function(val) {
                     this._sensor = val;
 
-                    if(!this._shape) {
-                        return;
-                    }
-                    this._shape.setSensor(val);
+                    this._shapes.forEach(function(shape) {
+                        shape.setSensor(val);
+                    });
                 }
             },
 
@@ -71,9 +79,9 @@
                 set: function(val) {
                     this._elasticity = val;
 
-                    if(this._shape) {
-                        this._shape.setElasticity(val);
-                    }
+                    this._shapes.forEach(function(shape) {
+                        shape.setElasticity(val);
+                    });
                 }
             },
 
@@ -84,9 +92,9 @@
                 set: function(val) {
                     this._friction = val;
 
-                    if(this._shape) {
-                        this._shape.setFriction(val);
-                    }
+                    this._shapes.forEach(function(shape) {
+                        shape.setFriction(val);
+                    });
                 }
             }
         },
