@@ -120,7 +120,7 @@
             for(var key in this._components){
                 var c = this._components[key];
                 if(c.onUpdate) {
-                    c.onUpdate(this);
+                    c.onUpdate(dt);
                 }
             }
         },
