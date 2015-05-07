@@ -7,12 +7,28 @@
 })(function(require, exports, module) {
     "use strict";
 
+    var Time = require('./Time.js');
+
     var KeyManager = function(element) {
 
         var _map = {};
 
-        this.isKeyDown = function(key) {
-            return _map[key];
+        this.isKeyDown = function(key, duration) {
+            var state = _map[key];
+            if(!state) {
+                return false;
+            }
+
+            if(duration !== undefined) {
+                return (Time.now - state.time) <= duration;
+            } else {
+                return state.pressed;
+            }
+        };
+
+        this.isKeyRelease = function(key) {
+            var state = _map[key];
+            return !state || !state.pressed;
         };
         
         this.matchKeyDown = function(keys) {
@@ -25,7 +41,8 @@
             var match = true;
 
             for(var i in keys) {
-                if(!_map[keys[i]]) {
+                var state = _map[keys[i]];
+                if(!state || !state.pressed) {
                     match = false;
                     break;
                 }
@@ -35,11 +52,21 @@
         };
 
         this.onKeyPressed = function(key) {
-            _map[key] = true;
+            var state = _map[key];
+            if(state && state.pressed) {
+                return;
+            }
+
+            _map[key] = {
+                pressed: true,
+                time: Time.now
+            };
         }
 
         this.onKeyReleased = function(key) {
-            delete _map[key];
+            _map[key] = {
+                pressed: false,
+            };
         }
 
         // for web application
