@@ -62,7 +62,7 @@
         var space = cl.space ;
 
         // Gravity
-        space.gravity = cp.v(0, -100);
+        space.gravity = cp.v(0, -700);
 
 
         var debugNode = new cc.PhysicsDebugNode( space );
@@ -74,11 +74,7 @@
         }
         parent.addChild( debugNode, 10000 );
 
-        scene.scheduleUpdate();
-        scene.update = function( delta ) {
-            cl.space.step( delta );
-        }
-
+        scene.addUpdateFunc(cl.space.step.bind(cl.space));
     }
 
     SceneManager.parseData = function(json, cb){
@@ -88,6 +84,7 @@
         cc.LoaderScene.preload(data.res, function () {
 
             var scene = new cc.Scene();
+            self.initScene(scene);
 
             scene.res = data.res;
 
@@ -111,6 +108,23 @@
 
         }, this);
     };
+
+    SceneManager.initScene = function(scene) {
+
+        var updateList = [];
+
+        scene.update = function(dt) {
+            for(var i=0; i<updateList.length; i++) {
+                updateList[i](dt);
+            }
+        }
+
+        scene.addUpdateFunc = function(func) {
+            updateList.push(func);
+        }
+
+        scene.scheduleUpdate();
+    }
 
     module.exports = cl.SceneManager = SceneManager;
 });
