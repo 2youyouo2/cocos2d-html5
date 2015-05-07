@@ -93,7 +93,7 @@
                 parent = cl.createCanvas(scene, data.canvas);
             }
 
-            if(cl.config.physics !== 'None') {
+            if(cl.config.physics !== 'none') {
                 self.initPhysics(scene, data.physics);
             }
 
