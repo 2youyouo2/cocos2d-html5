@@ -12,24 +12,37 @@
 
 
     var PhysicsBox = Component.extendComponent("PhysicsBox", {
-        properties: PhysicsShape.prototype.properties.concat(['width', 'height']),
-
+        properties: PhysicsShape.prototype.properties.concat(['width', 'height', 'anchor']),
+        
         ctor: function() {
-            this._super();
 
-            this._width  = 50;
-            this._height = 50;
+            this.width  = 50;
+            this.height = 50;
+            this._anchor = cl.p(0.5, 0.5);
+            
+            this._super();
         },
 
         createVerts: function() {
-            var hw = this._width/2;
-            var hh = this._height/2;
+            var t = this.getComponent('TransformComponent');
+
+            var ax = this.anchor.x, ay = this.anchor.y;
+            var w  = this.width,    h  = this.height;
+            var sx = t.scaleX,      sy = t.scaleY;
+
+            var hw = this.width  * this.anchor.x * t.scaleX;
+            var hh = this.height * this.anchor.y * t.scaleY;
+
+            var l = -w * sx * ax;
+            var r =  w * sx * (1-ax);
+            var b = -h * sy * ay;
+            var t =  h * sy * (1-ay);
 
             var verts = [
-                -hw, -hh,
-                -hw,  hh,
-                 hw,  hh,
-                 hw, -hh
+                l, b,
+                l, t,
+                r, t,
+                r, b
             ];
 
             return verts;
@@ -40,21 +53,12 @@
         },
 
         _get_set_: {
-            width: {
+            anchor: {
                 get: function() {
-                    return this._width;
+                    return this._anchor;
                 },
                 set: function(val) {
-                    this._width = val;
-                }
-            },
-
-            height: {
-                get: function() {
-                    return this._height;
-                },
-                set: function(val) {
-                    this._height = val;
+                    this._anchor = cl.p(val);
                 }
             }
         }

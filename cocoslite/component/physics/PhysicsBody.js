@@ -13,12 +13,12 @@
         properties: ['static', 'mess', 'moment'],
 
         ctor: function() {
-            this._super();
-
             this._static = false;
             this._mess = 1;
             this._moment = 1000;
             this._duringUpdate = false;
+
+            this._super();
         },
 
         getBody: function() {
@@ -32,6 +32,9 @@
                 this._body = new cp.Body(this._mess, this._moment );
                 cl.space.addBody( this._body );
             }
+
+            this.setVel = this._body.setVel.bind(this._body);
+            this.getVel = this._body.getVel.bind(this._body);
 
             var self = this;
 
