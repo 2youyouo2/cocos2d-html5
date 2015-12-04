@@ -415,11 +415,13 @@ var AnimationComponent = cc.Class({
         }
 
         // wrap time for change wrapMode
-        if ((clip.wrapMode & cc.WrapMode.Loop) === 0) {
-            oldState.time = oldState.getWrappedInfo(oldState.time).time;
-        }
-        if ((clip.wrapMode & cc.WrapMode.Reverse) !== 0) {
-            oldState.time = Math.abs(oldState.time - oldState.duration);
+        if (clip.wrapMode !== oldState.clip.wrapMode) {
+            if ((clip.wrapMode & cc.WrapMode.Loop) === 0) {
+                oldState.time = oldState.getWrappedInfo(oldState.time).time;
+            }
+            if ((clip.wrapMode & cc.WrapMode.Reverse) !== 0) {
+                oldState.time = Math.abs(oldState.time - oldState.duration);
+            }
         }
 
         oldState._clip = clip;
