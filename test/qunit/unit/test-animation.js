@@ -555,6 +555,15 @@ test('CCAnimation._updateClip', function () {
 
     animation._updateClip(newClip);
     strictEqual(animation._clips.indexOf(newClip), 0, 'clip index should be 0');
+
+    newClip.wrapMode = cc.WrapMode.PingPong;
+    var state = animation.getAnimationState(newClip.name);
+    state.time = 0.9;
+
+    animation._updateClip(newClip);
+    animation._updateClip(newClip);
+
+    strictEqual(state.time, 0.9, 'time should not changed');
 });
 
 test('sampleMotionPaths', function () {
